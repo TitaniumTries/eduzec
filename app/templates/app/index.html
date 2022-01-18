@@ -1,15 +1,16 @@
 {% extends "app/base.html" %}
+{% load static %}
 {% block title %}َWelcome - Eduzec{% endblock %}
 
 {% block content %}
 <header>
-    <img class="logo" src="../../static/images/logo.png" alt="logo">
+    <img class="logo" src="{% static "images/logo.png" %}" alt="Eduzec Logo">
     <nav>
         <ul>
-            <li><a href="dashboard/">Home</a></li>
-            <li><a href="signup/">SignUp</a></li>
-            <li><a href="signin/">SignIn</a></li>
-            <li><a href="contact.html">Contact</a></li>
+            <li><a href="{% url "app:dashboard" %}">Home</a></li>
+            <li><a href="{% url "app:signup" %}">Sign up</a></li>
+            <li><a href="{% url "app:signin" %}">Sign in</a></li>
+            <li><a href="#">Contact</a></li>
         </ul>
     </nav>
 </header>
