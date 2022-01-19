@@ -13,7 +13,7 @@ def signup(request):
         form = UserCreationForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('signin')
+            return redirect('../signin/')
     else:
         form = UserCreationForm()
     return render(request, 'app/signup.html', {'form': form})
@@ -23,7 +23,7 @@ def signin(request):
     if request.method == "POST":
         form = AuthenticationForm(data=request.POST)
         if form.is_valid():
-            return redirect('dashboard')
+            return redirect('../dashboard/')
     else:
         form = AuthenticationForm()
     return render(request, 'app/signin.html', {'form': form})
