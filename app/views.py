@@ -1,4 +1,4 @@
-from django.contrib.auth import logout as dj_auth_logouts
+from django.contrib.auth import logout as dj_auth_logout
 from django.shortcuts import render, redirect
 
 from .forms import UserRegisterForm
@@ -13,15 +13,15 @@ def register(request):
         form = UserRegisterForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('../dashboard')
+            return redirect('app:dashboard')
     else:
         form = UserRegisterForm()
     return render(request, 'app/register.html', {'form': form})
 
 
-def logouts(request):
+def logout(request):
     if request.method == "POST":
-        dj_auth_logouts(request)
+        dj_auth_logout(request)
     return render(request, 'app/logout.html')
 
 

@@ -1,4 +1,4 @@
 {% block content %}
 <h3>You have logged out!</h3>
-    <button type="submit"><a href="../login/">Login Again</a></button>
+    <button type="submit"><a href="{% url "app:login" %}">Login Again</a></button>
 {% endblock %}
