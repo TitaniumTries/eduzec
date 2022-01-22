@@ -45,7 +45,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+<<<<<<< HEAD
+=======
+    'app',
+    'users',
+>>>>>>> 0c4914b (Created CustomUser model with CustomUserCreationForm, CustomUserAuthenticationForm and CustomUserChangeForm in a separate users app)
 ]
+
+AUTH_USER_MODEL = 'users.CustomUser'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
