@@ -1,6 +1,6 @@
 {% extends 'app/base.html' %}
 
 {% block content %}
-<h3>Welcome to the Dashboard</h3>
+<h3>Welcome to the Dashboard {{ request.user }}</h3>
     <button type="submit"><a href="../logout/">Logout</a></button>
 {% endblock %}
