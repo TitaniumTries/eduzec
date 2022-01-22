@@ -1,37 +1,33 @@
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.forms import UserCreationForm
-from django.http import HttpResponse
+from django.contrib.auth import login, authenticate
 from django.shortcuts import render, redirect
+from . forms import UserRegisterForm
+from django.contrib.auth import logout as logouts
 
 
 def landing(request):
     return render(request, "app/index.html")
 
 
-def signup(request):
+def register(request):
     if request.method == "POST":
-        form = UserCreationForm(request.POST)
+        form = UserRegisterForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('../signin/')
+            return redirect('../dashboard')
     else:
-        form = UserCreationForm()
-    return render(request, 'app/signup.html', {'form': form})
+        form = UserRegisterForm()
+    return render(request, 'app/register.html', {'form': form})
 
-
-def signin(request):
+def logouts(request):
     if request.method == "POST":
-        form = AuthenticationForm(data=request.POST)
-        if form.is_valid():
-            return redirect('../dashboard/')
-    else:
-        form = AuthenticationForm()
-    return render(request, 'app/signin.html', {'form': form})
+        logouts(request)
+    return render(request, 'app/logout.html')
 
 
 def dashboard(request):
     return render(request, 'app/dashboard.html')
 
 
-def forum(request):
-    return HttpResponse('Hello World! This is the FORUM page!')
+
