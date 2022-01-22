@@ -1,9 +1,7 @@
-from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import logout as dj_auth_logouts
 from django.shortcuts import render, redirect
-from . forms import UserRegisterForm
-from django.contrib.auth import logout as logouts
+
+from .forms import UserRegisterForm
 
 
 def landing(request):
@@ -20,14 +18,12 @@ def register(request):
         form = UserRegisterForm()
     return render(request, 'app/register.html', {'form': form})
 
+
 def logouts(request):
     if request.method == "POST":
-        logouts(request)
+        dj_auth_logouts(request)
     return render(request, 'app/logout.html')
 
 
 def dashboard(request):
     return render(request, 'app/dashboard.html')
-
-
-
