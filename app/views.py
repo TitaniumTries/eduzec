@@ -19,11 +19,5 @@ def register(request):
     return render(request, 'app/register.html', {'form': form})
 
 
-def logout(request):
-    if request.method == "POST":
-        dj_auth_logout(request)
-    return render(request, 'app/logout.html')
-
-
 def dashboard(request):
     return render(request, 'app/dashboard.html')
