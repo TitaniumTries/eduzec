@@ -11,7 +11,7 @@
     {% block content %}
     {% endblock %}
 {% else %}
-    <p>Please Login <a href='../login/'>here.</a></p>
+    <p>Please Login <a href='{% url "app:login" %}'>here.</a></p>
 {% endif %}
 </body>
 </html>
