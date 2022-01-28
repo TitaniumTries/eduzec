@@ -27,6 +27,13 @@ DEBUG = None
 
 ALLOWED_HOSTS = ["*"]
 
+# Custom settings
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+LOGIN_REDIRECT_URL = 'app:dashboard'
+LOGOUT_REDIRECT_URL = 'app:dashboard'
+LOGIN_URL = 'app:login'
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -118,8 +125,3 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-CRISPY_TEMPLATE_PACK = 'bootstrap4'
-
-LOGIN_REDIRECT_URL = 'app:dashboard'
-LOGOUT_REDIRECT_URL = 'app:dashboard'

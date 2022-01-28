@@ -14,3 +14,7 @@ body, p {
 h1 {
     font-family: 'Poppins', Arial, Helvetica, sans-serif;
 }
+
+#content {
+    margin: 50px;
+}

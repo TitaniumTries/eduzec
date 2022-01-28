@@ -7,11 +7,9 @@
     <title>{% block title %}{% endblock %}</title>
 </head>
 <body>
-{% if user.is_authenticated %}
+<div id="content" style="">
     {% block content %}
     {% endblock %}
-{% else %}
-    <p>Please Login <a href='{% url "app:login" %}'>here.</a></p>
-{% endif %}
+</div>
 </body>
 </html>

@@ -1,4 +1,4 @@
-from django.contrib.auth import logout as dj_auth_logout
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 
 from .forms import UserRegisterForm
@@ -19,5 +19,6 @@ def register(request):
     return render(request, 'app/register.html', {'form': form})
 
 
+@login_required
 def dashboard(request):
     return render(request, 'app/dashboard.html')
