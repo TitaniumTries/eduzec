@@ -1,6 +1,11 @@
-{% extends 'app/base.html' %}
+{% extends 'base.html' %}
 
 {% block content %}
-<h3>Welcome to the Dashboard, {{ request.user }}!!</h3>
+    <h3>Welcome to the Dashboard, {{ request.user.username }}!</h3>
     <button type="submit"><a href="{% url "logout" %}">Logout</a></button>
+    <p>
+        <a href="{% url "app:edit_account" %}">Edit your account</a>
+        <a href="{% url "password_change" %}">Change password</a>
+    </p>
+
 {% endblock %}

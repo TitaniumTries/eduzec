@@ -6,9 +6,6 @@ body, p {
     padding: 0;
     font-family: 'Myriad Apple', sans-serif;
     background: rgb(117, 117, 117);
-    background-size: 400% 400%;
-    animation: gradient 15s ease infinite;
-    height: 100vh;
 }
 
 h1 {
@@ -17,4 +14,8 @@ h1 {
 
 #content {
     margin: 50px;
+}
+
+.errorlist {
+    color: orange;
 }
