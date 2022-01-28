@@ -7,11 +7,18 @@
     <title>{% block title %}{% endblock %}</title>
 </head>
 <body>
-{% if user.is_authenticated %}
+<div id="content" >
+    {% if messages %}
+        <ul class="messages">
+        {% for message in messages %}
+            <li class="{{ message.tags }}">
+                {{ message.message|safe }}
+            </li>
+        {% endfor %}
+        </ul>
+    {% endif %}
     {% block content %}
     {% endblock %}
-{% else %}
-    <p>Please Login <a href='{% url "app:login" %}'>here.</a></p>
-{% endif %}
+</div>
 </body>
 </html>
