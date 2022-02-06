@@ -21,10 +21,10 @@ MIDDLEWARE = [
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'd6778krnp5ooid',
-        'USER': 'yedofkcgxmxyxq',
-        'PASSWORD': '2aa6181fb4e9db9b4d321ea0b624e727003a2097c23edcdfd9a8c8228007cfad',
-        'HOST': 'ec2-54-247-96-153.eu-west-1.compute.amazonaws.com',
+        'NAME': 'df8js9ntl7ah3r',
+        'USER': 'pewifymilfrmue',
+        'PASSWORD': '6d03f47bf30d15dff496e7995b339318490bd59e5883d9ed17f203759ef32bb5',
+        'HOST': 'ec2-52-51-155-48.eu-west-1.compute.amazonaws.com',
         'PORT': '5432',
     }
 }
