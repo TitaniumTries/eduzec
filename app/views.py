@@ -36,3 +36,6 @@ def edit(request):
     else:
         form = CustomUserChangeForm(instance=request.user)
     return render(request, "app/edit_account.html", {"form": form})
+
+def questions(request):
+    return render(request, 'app/questions.html')

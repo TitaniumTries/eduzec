@@ -23,6 +23,19 @@ class Answer(models.Model):
     def __str__(self):
         return self.detail
 
+class Comment(models.Model):
+    answer = models.ForeignKey(Answer, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='comment_user')
+    add_time = models.DateTimeField(auto_now_add=True)
+    
+class UpVote(models.Model):
+    answer = models.ForeignKey(Answer, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='upvote_user')
+    
+class DownVote(models.Model):
+    answer = models.ForeignKey(Answer, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='downvote_user')
+
 
     
-    
+
