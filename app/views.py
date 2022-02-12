@@ -11,10 +11,11 @@ def landing(request):
 
 def register(request):
     if request.method == "POST":
+        print(request.POST)
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('app:dashboard')
+            return redirect('app:login')
     else:
         form = CustomUserCreationForm()
     return render(request, 'app/register.html', {'form': form})
