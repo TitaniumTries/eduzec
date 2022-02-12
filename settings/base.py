@@ -37,6 +37,7 @@ LOGIN_URL = 'app:login'
 # Application definition
 
 INSTALLED_APPS = [
+    'django.contrib.humanize',
     'app',
     'django.contrib.admin',
     'django.contrib.auth',
