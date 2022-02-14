@@ -1,8 +1,10 @@
+from xml.etree.ElementTree import Comment
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from users.forms import CustomUserCreationForm, CustomUserChangeForm, CustomUserAuthenticationForm
-from .models import Answer, Question
+from .models import Answer, Question, Comment
+from django.http import HttpResponse
 from django.core.paginator import Paginator
 
 def landing(request):
@@ -53,6 +55,10 @@ def questions(request):
 def detail(request,id):
     quest=Question.objects.get(pk=id)
     tags = quest.tags.split(',')
+    answers = Answer.objects.all().order_by('-id')
     answer = Answer.objects.get(question=quest)
-    return render(request,'app/detail.html', {'quest': quest, 'tags': tags,'answer': answer})
+    comments = Comment.objects.filter(answer=answer).order_by('id')
+    return render(request,'app/detail.html', {'quest': quest, 'tags': tags,'answer': answer, 'comments': comments})
+
+
 

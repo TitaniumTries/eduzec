@@ -28,6 +28,7 @@ class Answer(models.Model):
 class Comment(models.Model):
     answer = models.ForeignKey(Answer, on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='comment_user')
+    comment = models.TextField(default='')
     add_time = models.DateTimeField(auto_now_add=True)
     
 class UpVote(models.Model):
