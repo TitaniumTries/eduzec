@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from users.forms import CustomUserCreationForm, CustomUserChangeForm, CustomUserAuthenticationForm
-from .models import Question
+from .models import Answer, Question
 from django.core.paginator import Paginator
 
 def landing(request):
@@ -52,5 +52,7 @@ def questions(request):
 
 def detail(request,id):
     quest=Question.objects.get(pk=id)
-    return render(request,'app/detail.html', {'quest': quest})
+    tags = quest.tags.split(',')
+    answer = Answer.objects.get(question=quest)
+    return render(request,'app/detail.html', {'quest': quest, 'tags': tags,'answer': answer})
 

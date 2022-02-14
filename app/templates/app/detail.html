@@ -57,51 +57,66 @@
             <text>by</text>
             <a href='#' class='ml-2'>{{quest.user.username}}</a>
         </p>
+        <p>
+            tags:
+            {% for tags in tags %}
+            <a href='#' class='badge badge-secondary p-1'>{{tags}}</a>
+            {% endfor %}
+        </p>
         <hr/>
         <div class='row'>
             <div class='col-1'>
                 <div class='upvote'>
                     <strong>123</strong><br/>
                     <span class='text-success'>
-                    <i class="fa fa-arrow-up fa-2x"></i>
+                    <i class="fa fa-chevron-up fa-2x"></i>
                     </span>
                 </div>
-                <div class='downvote mt-3'>
+                <div class='downvote mt-2'>
                     <span class='text-danger'>
-                    <i class="fa fa-arrow-down fa-2x"></i>
+                    <i class="fa fa-chevron-down fa-2x"></i>
                     </span><br/>
                     <strong>123</strong>
                 </div>
-                <hr/>
             </div>
             <div class='col-11'>
                 <p class='mt-3'>
                     {{quest.detail}}
                 </p>
             </div>
-            <hr/>
-        
-            <hr/>
             <div class='col-1'>
                 <div class='upvote'>
                     <strong>123</strong><br/>
                     <span class='text-success'>
-                    <i class="fa fa-arrow-up fa-2x"></i>
+                    <i class="fa fa-chevron-up fa-2x"></i>
                     </span>
                 </div>
-                <div class='downvote mt-3'>
+                <div class='downvote mt-2'>
                     <span class='text-danger'>
-                    <i class="fa fa-arrow-down fa-2x"></i>
+                    <i class="fa fa-chevron-down fa-2x"></i>
                     </span><br/>
                     <strong>123</strong>
                 </div>
             </div>
             <div class='col-11'>
-                <p class='mt-3'>
-                    {{quest.answer}}
+                <p class='mt-1'>
+                    {{answer.detail}}
                 </p>
+                <hr/>
+                <p>
+                    <span class='mr-2'>{{quest.add_time|date:'d/m/y'}}</span>
+                    <text>by</text>
+                    <a href='#' class='mr-2'>{{ answer.user }}</a>
+                    <span>5 comments</span>
+                </p>
+                <!--Comment Section Start-->
+                <h3 class='my-2'>Comments</h3>
+                <div class='card'>
+                    <div class='card-body'>
+                        <p><a href='#'>User</a><text> - </text>This is an answer dudehis is an answer dude This is an answer dude This is an answer dude This is an answer dude</p>
+                    </div>
+                </div>
             </div>
-
         </div>
     </div>
 </body>
