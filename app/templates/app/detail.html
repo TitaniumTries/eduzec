@@ -109,7 +109,7 @@
                 </p>
                 <hr/>
                 <p>
-                    <span class='mr-2'>{{quest.add_time|date:'d/m/y'}}</span>
+                    <span class='mr-2'>{{answer.add_time|date:'d/m/y'}}</span>
                     <text>by</text>
                     <a href='#' class='mr-2'>{{ answer.user }}</a>
                     <span>5 comments</span>
@@ -158,11 +158,11 @@
                 },
                 success:function(res){
                     if(res.bool==true){
-                        $('.comment-text').val('');
+                        //$('.comment-text').val('');
                         // Append Element or somethin
                         var _html="<div class='card animate__animated animate__fadeInDown'>\
                             <div class='card-body'>\
-                                <p><a href='#'>{{ request.user }}</a><text> - </text>'+_comment+'</p>\
+                                <p><a href='#'>{{ request.user }}</a><text> - </text>" + _comment + "</p>\
                             </div>\
                         </div>";
                         $('.comment-wrapper').append(_html);

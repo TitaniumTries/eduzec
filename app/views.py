@@ -17,7 +17,6 @@ def landing(request):
 
 def register(request):
     if request.method == "POST":
-        print(request.POST)
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             form.save()
