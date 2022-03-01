@@ -11,7 +11,7 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
-            <a class="navbar-brand" href="../">Eduzec</a>
+            <a class="navbar-brand" href="{% url "app:landing" %}">Eduzec</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -20,9 +20,10 @@
                     <div class='input-group'>
                         <button class="btn btn-dark px-3" type="submit">Ask</button>
                         <div class="input-group-append">
-                        <input type="text" name="q" class="form-control" placeholder="Search" />
-                        <div class="input-group-append">
-                        <button class="btn btn-dark px-2" type="submit">Search</button>
+                            <input type="text" name="q" class="form-control" placeholder="Search" />
+                            <div class="input-group-append">
+                                <button class="btn btn-dark px-2" type="submit">Search</button>
+                            </div>
                         </div>
                     </div>
                 </form>
@@ -51,7 +52,7 @@
         {% for quest in quests %}
         <div class='card'>
             <div class='card-body'>
-                <h5 class='card-title'><a href="/detail/{{quest.id}}">{{quest.title}}></a></h5>
+                <h5 class='card-title'><a href="{% url "app:detail" quest.id %}">{{quest.title}}></a></h5>
                 <p>
                     <a href='#' class='mr-2'>{{quest.user}}</a>
                     <a href='#' class='mr-2'>3 Answers</a>
