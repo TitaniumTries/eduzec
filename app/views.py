@@ -1,9 +1,11 @@
+import json
 from xml.etree.ElementTree import Comment
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.shortcuts import render, redirect
+from django.http import JsonResponse
 
 from users.forms import CustomUserCreationForm, CustomUserChangeForm
 from .models import Answer, Question, Comment
@@ -63,3 +65,16 @@ def detail(request, id_):
     answer = Answer.objects.get(question=quest)
     comments = Comment.objects.filter(answer=answer).order_by('id')
     return render(request, 'app/detail.html', {'quest': quest, 'tags': tags, 'answer': answer, 'comments': comments})
+
+def save_comment(request):
+    if request.method=='POST':
+        comment=request.POST['comment']
+        answerid=request.POST['answerid']
+        answer=Answer.objects.get(pk=answerid)
+        user=request.user
+        Comment.objects.create(
+            answer=answer,
+            comment=comment,
+            user=user
+        )
+        return JsonResponse({'bool':True})

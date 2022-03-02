@@ -9,4 +9,5 @@ urlpatterns = [
     path('edit/', views.edit, name='edit_account'),
     path('questions/', views.questions, name='questions'),
     path('detail/<int:id_>', views.detail, name='detail'),
+    path('save-comment', views.save_comment, name='save-comment'),
 ]
