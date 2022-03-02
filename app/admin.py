@@ -3,7 +3,7 @@ from .models import *
 
 class QuestionAdmin(admin.ModelAdmin):
     list_display = ('title', 'user')
-    seach_fields = ('title', 'detail')
+    search_fields = ('title', 'detail')
 
 admin.site.register(Question, QuestionAdmin)
 admin.site.register(Answer)
