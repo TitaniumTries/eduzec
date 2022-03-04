@@ -72,16 +72,21 @@
         <div class='row'>
             <div class='col-1'>
                 <div class='upvote'>
-                    <strong>123</strong><br/>
-                    <span class='text-success'>
-                    <i class="fa fa-chevron-up fa-2x"></i>
-                    </span>
+                    <button type="button" class="cast-vote" vote_type="upvote" vote_to="question" id='{{ quest.id }}'>
+                        <span class='text-success'>
+                            <i class="fa fa-chevron-up fa-2x"></i>
+                        </span>
+                    </button> 
+                </div>
+                <div>
+                    <strong class="quest_votes">{{ quest.votes.count }}</strong><br/>
                 </div>
                 <div class='downvote mt-2'>
-                    <span class='text-danger'>
-                    <i class="fa fa-chevron-down fa-2x"></i>
-                    </span><br/>
-                    <strong>123</strong>
+                    <button type="button" class="cast-vote" vote_type="downvote" vote_to="question" id='{{ quest.id }}'>
+                        <span class='text-danger'>
+                            <i class="fa fa-chevron-down fa-2x"></i>
+                        </span><br/>
+                    </button>
                 </div>
             </div>
             <div class='col-11'>
@@ -91,16 +96,21 @@
             </div>
             <div class='col-1'>
                 <div class='upvote'>
-                    <strong>123</strong><br/>
-                    <span class='text-success'>
-                    <i class="fa fa-chevron-up fa-2x"></i>
-                    </span>
+                    <button type="button" class="cast-vote" vote_type="upvote" vote_to="answer" id='{{ answer.id }}'>
+                        <span class='text-success'>
+                            <i class="fa fa-chevron-up fa-2x"></i>
+                        </span>
+                    </button>
+                </div>
+                <div>
+                    <strong class="answer_votes">{{ answer.votes.count }}</strong><br/>
                 </div>
                 <div class='downvote mt-2'>
-                    <span class='text-danger'>
-                    <i class="fa fa-chevron-down fa-2x"></i>
-                    </span><br/>
-                    <strong>123</strong>
+                    <button type="button" class="cast-vote" vote_type="downvote" vote_to="answer" id='{{ answer.id }}'>
+                        <span class='text-danger'>
+                            <i class="fa fa-chevron-down fa-2x"></i>
+                        </span><br/>
+                    </button>
                 </div>
             </div>
             <div class='col-11'>
@@ -168,6 +178,52 @@
                         $('.comment-wrapper').append(_html);
                     }
                     $('.save-comment').removeClass('disabled').text('Comment');
+                }
+            });
+        });
+    });
+</script>
+<script>
+    $(document).ready(function(){
+        $('.cast-vote').on('click',function(){
+            var _vote_type=$(this).attr('vote_type');
+            var _id = $(this).attr('id')
+            var _vote_to=$(this).attr('vote_to');
+            // Ajax starts here i guess
+            $.ajax({
+                url:'/save-vote',
+                type:'post',
+                data:{
+                    vote_type:_vote_type,
+                    vote_to:_vote_to,
+                    id:_id,
+                    csrfmiddlewaretoken:'{{csrf_token}}',
+                },
+                dataType:'json',
+                beforeSend:function(){
+                    
+                },
+                success:function(res){
+                    if(res.bool==true){
+                        var votes
+                        if (_vote_to=="question") {
+                            votes = $('.quest_votes').text()
+                            
+                            if (_vote_type == "upvote") {
+                                votes = votes + 1
+                                $('.quest_votes').text(votes)
+                            }
+                            else
+                                $('.quest_votes').text(votes - 1)
+                        }
+                        else {
+                            votes = $('.answer_votes').html()
+                            if (_vote_type == "upvote")
+                                $('.answer_votes').html(votes + 1)
+                            else
+                                $('.answer_votes').html(votes - 1)
+                        }
+                    }
                 }
             });
         });
