@@ -1,3 +1,4 @@
+from asyncio.windows_events import NULL
 import json
 from pickle import FALSE
 from xml.etree.ElementTree import Comment
@@ -62,10 +63,12 @@ def questions(request):
 def detail(request, id_):
     quest = Question.objects.get(pk=id_)
     tags = quest.tags.split(',')
-    answers = Answer.objects.all().order_by('-id')
-    answer = Answer.objects.get(question=quest)
-    comments = Comment.objects.filter(answer=answer).order_by('id')
-    return render(request, 'app/detail.html', {'quest': quest, 'tags': tags, 'answer': answer, 'comments': comments})
+    answers = Answer.objects.filter(question=quest).order_by('id')
+    comments = []
+    for answer in answers:
+        comments.append(Comment.objects.filter(answer=answer))
+    answers_comments = zip(answers, comments)
+    return render(request, 'app/detail.html', {'quest': quest, 'tags': tags, 'answers_comments': answers_comments})
 
 def save_comment(request):
     if request.method=='POST':

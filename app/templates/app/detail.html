@@ -94,6 +94,7 @@
                     {{quest.detail}}
                 </p>
             </div>
+            {% for answer, comments in answers_comments %}
             <div class='col-1'>
                 <div class='upvote'>
                     <button type="button" class="cast-vote" vote_type="upvote" vote_to="answer" id='{{ answer.id }}'>
@@ -145,6 +146,7 @@
                     {% endfor %}
                 </div>
             </div>
+            {% endfor %}
         </div>
     </div>
 <script src='{% static 'jquery-3.5.1.min.js' %}'></script>
@@ -189,6 +191,7 @@
             var _vote_type=$(this).attr('vote_type');
             var _id = $(this).attr('id')
             var _vote_to=$(this).attr('vote_to');
+            var _vote = 1
             // Ajax starts here i guess
             $.ajax({
                 url:'/save-vote',
@@ -207,17 +210,16 @@
                     if(res.bool==true){
                         var votes
                         if (_vote_to=="question") {
-                            votes = $('.quest_votes').text()
+                            votes = parseInt($('.quest_votes').text())
                             
                             if (_vote_type == "upvote") {
-                                votes = votes + 1
-                                $('.quest_votes').text(votes)
+                                $('.quest_votes').text(votes + 1)
                             }
                             else
                                 $('.quest_votes').text(votes - 1)
                         }
                         else {
-                            votes = $('.answer_votes').html()
+                            votes = parseInt($('.answer_votes').html())
                             if (_vote_type == "upvote")
                                 $('.answer_votes').html(votes + 1)
                             else
