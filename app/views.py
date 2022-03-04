@@ -13,6 +13,7 @@ from users.forms import CustomUserCreationForm, CustomUserChangeForm
 from .models import Answer, Question, Comment
 
 from vote.models import UP, DOWN
+from .utilities import cast_vote
 
 def landing(request):
     return render(request, "app/index.html")
@@ -89,30 +90,4 @@ def save_vote(request):
         user_id = request.user.id
         vote_to = request.POST['vote_to']
         vote_type = request.POST['vote_type']
-        success = True
-        if vote_to == "question":
-            question = Question.objects.get(pk=id)
-            if vote_type == "upvote":
-                if question.votes.exists(user_id):
-                    success = False
-                else:
-                    question.votes.up(user_id)
-            else:
-                if question.votes.exists(user_id, action=DOWN):
-                    success = False
-                else:
-                    question.votes.down(user_id)
-        else:
-            answer = Answer.objects.get(pk=id)
-            if vote_type == "upvote":
-                if answer.votes.exists(user_id):
-                    success = False
-                else:
-                    answer.votes.up(user_id)
-            else:
-                if answer.votes.exists(user_id, action=DOWN):
-                    success = False
-                else:
-                    answer.votes.down(user_id)
-    return JsonResponse({'bool':success})
-
+    return JsonResponse({'bool': cast_vote(vote_type, vote_to, user_id, id)})
