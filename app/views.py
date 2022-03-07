@@ -69,7 +69,8 @@ def detail(request, id_):
     for answer in answers:
         comments.append(Comment.objects.filter(answer=answer))
     answers_comments = zip(answers, comments)
-    return render(request, 'app/detail.html', {'quest': quest, 'tags': tags, 'answers_comments': answers_comments})
+    num_answers = len(answers)
+    return render(request, 'app/detail.html', {'quest': quest, 'tags': tags, 'answers_comments': answers_comments, 'num_answers': num_answers})
 
 def save_comment(request):
     if request.method=='POST':

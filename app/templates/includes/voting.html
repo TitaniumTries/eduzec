@@ -1,0 +1,19 @@
+<div class='col-1 voting' vote_to="{{ vote_to }}" id="{{ id }}">
+    <div class='upvote' vote_type="upvote">
+        <button type="button" class="cast-vote">
+            <span class='text-success'>
+                <i class="fa fa-chevron-up fa-2x"></i>
+            </span>
+        </button> 
+    </div>
+    <div>
+        <strong class="{{ vote_to }}_votes">{{ vote_count }}</strong><br/>
+    </div>
+    <div class='downvote mt-2' vote_type="downvote">
+        <button type="button" class="cast-vote" vote_type="downvote">
+            <span class='text-danger'>
+                <i class="fa fa-chevron-down fa-2x"></i>
+            </span><br/>
+        </button>
+    </div>
+</div>

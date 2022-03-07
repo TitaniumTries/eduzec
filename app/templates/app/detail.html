@@ -12,14 +12,7 @@
 {% endblock %}
 
 {% block extra_nav %}
-    <div class='input-group'>
-        <button class="btn btn-dark px-3" type="submit">Ask</button>
-        <div class="input-group-append">
-        <input type="text" name="q" class="form-control" placeholder="Search" />
-        <div class="input-group-append">
-        <button class="btn btn-dark px-2" type="submit">Search</button>
-        </div>
-    </div>
+    {% include 'includes/question_extra_nav.html' %}
 {% endblock %}
 
 {% block content %}
@@ -29,7 +22,8 @@
     <p>
         <span class='mr-2'>{{quest.add_time|date:'d/m/y'}}</span>
         <text>by</text>
-        <a href='#' class='ml-2'>{{quest.user.username}}</a>
+        <a href='#' class='ml-2'>{{quest.user}}</a>
+        <span>{{ num_answers }} answers</span>
     </p>
     <p>
         tags:
@@ -39,50 +33,14 @@
     </p>
     <hr/>
     <div class='row'>
-        <div class='col-1'>
-            <div class='upvote'>
-                <button type="button" class="cast-vote" vote_type="upvote" vote_to="question" id='{{ quest.id }}'>
-                    <span class='text-success'>
-                        <i class="fa fa-chevron-up fa-2x"></i>
-                    </span>
-                </button> 
-            </div>
-            <div>
-                <strong class="quest_votes" id="{{ quest.id }}">{{ quest.votes.count }}</strong><br/>
-            </div>
-            <div class='downvote mt-2'>
-                <button type="button" class="cast-vote" vote_type="downvote" vote_to="question" id='{{ quest.id }}'>
-                    <span class='text-danger'>
-                        <i class="fa fa-chevron-down fa-2x"></i>
-                    </span><br/>
-                </button>
-            </div>
-        </div>
+        {% include 'includes/voting.html' with vote_to='question' id=quest.id vote_count=quest.votes.count %}
         <div class='col-11'>
             <p class='mt-3'>
                 {{quest.detail}}
             </p>
         </div>
         {% for answer, comments in answers_comments %}
-        <div class='col-1'>
-            <div class='upvote'>
-                <button type="button" class="cast-vote" vote_type="upvote" vote_to="answer" id='{{ answer.id }}'>
-                    <span class='text-success'>
-                        <i class="fa fa-chevron-up fa-2x"></i>
-                    </span>
-                </button>
-            </div>
-            <div>
-                <strong class="answer_votes" id="{{ answer.id }}">{{ answer.votes.count }}</strong><br/>
-            </div>
-            <div class='downvote mt-2'>
-                <button type="button" class="cast-vote" vote_type="downvote" vote_to="answer" id='{{ answer.id }}'>
-                    <span class='text-danger'>
-                        <i class="fa fa-chevron-down fa-2x"></i>
-                    </span><br/>
-                </button>
-            </div>
-        </div>
+        {% include 'includes/voting.html' with vote_to='answer' id=answer.id vote_count=answer.votes.count %}
         <div class='col-11'>
             <p class='mt-1'>
                 {{answer.detail}}
@@ -92,7 +50,7 @@
                 <span class='mr-2'>{{answer.add_time|date:'d/m/y'}}</span>
                 <text>by</text>
                 <a href='#' class='mr-2'>{{ answer.user }}</a>
-                <span>5 comments</span>
+                <span>{{ comments|length }} comments</span>
             </p>
             {% if user.is_authenticated %}
             <!-- Comment Section Form -->

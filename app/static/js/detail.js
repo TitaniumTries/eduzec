@@ -1,8 +1,8 @@
 $(document).ready(function(){
     $('.cast-vote').on('click',function(){
-        var _vote_type=$(this).attr('vote_type');
-        var _id = $(this).attr('id');
-        var _vote_to=$(this).attr('vote_to');
+        var _vote_type=$(this).closest('[vote_type]').attr('vote_type');
+        var _id = $(this).closest('[id]').attr('id');
+        var _vote_to=$(this).closest('[vote_to]').attr('vote_to');
         // Ajax starts here i guess
         $.ajax({
             url:'/save-vote',
@@ -15,19 +15,19 @@ $(document).ready(function(){
             },
             dataType:'json',
             beforeSend:function(){
-                
+
             },
             success:function(res){
                 if(res.bool==true){
                     if (_vote_to == "question")
-                        obj = "quest"
+                        obj = "question"
                     else
                         obj = "answer"
-                    votes = parseInt($('.' + obj + '_votes[id=' + _id + ']').text())
+                    votes = parseInt($('.voting[id=' + _id + ']').find('.' + obj + '_votes').text())
                     if (_vote_type == "upvote")
-                        $('.' + obj + '_votes[id=' + _id + ']').html(votes + 1)
+                        $('.voting[id=' + _id + ']').find('.' + obj + '_votes').html(votes + 1)
                     else
-                        $('.' + obj + '_votes[id=' + _id + ']').html(votes - 1)
+                        $('.voting[id=' + _id + ']').find('.' + obj + '_votes').html(votes - 1)
                 }
             }
         });

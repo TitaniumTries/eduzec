@@ -86,11 +86,11 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-            <form class="ml-auto" action="/">
-                {% block extra_nav %} {% endblock %}
-            </form>
+            
+            
             <ul class="navbar-nav ml-auto">
                 {% if user.is_authenticated %}
+                    {% block extra_nav %} {% endblock %}
                     {% block nav %}
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'app:dashboard' %}">Dashboard</a>

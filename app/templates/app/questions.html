@@ -6,15 +6,7 @@
 {% endblock %}
 
 {% block extra_nav %}
-    <div class='input-group'>
-        <button class="btn btn-dark px-3" type="submit">Ask</button>
-        <div class="input-group-append">
-            <input type="text" name="q" class="form-control" placeholder="Search" />
-            <div class="input-group-append">
-                <button class="btn btn-dark px-2" type="submit">Search</button>
-            </div>
-        </div>
-    </div>
+    {% include 'includes/question_extra_nav.html' %}
 {% endblock %}
 
 {% block content %}
