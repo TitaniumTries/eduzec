@@ -1,52 +1,23 @@
+{% extends "base.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home Page</title>
-    <!-- Bootstrap 4 -->
-    <link rel="stylesheet" href="{% static 'bootstrap.min.css' %}" />
-</head>
-<body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
-            <a class="navbar-brand" href="{% url "app:landing" %}">Eduzec</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <form class='ml-auto'>
-                    <div class='input-group'>
-                        <button class="btn btn-dark px-3" type="submit">Ask</button>
-                        <div class="input-group-append">
-                            <input type="text" name="q" class="form-control" placeholder="Search" />
-                            <div class="input-group-append">
-                                <button class="btn btn-dark px-2" type="submit">Search</button>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-                <ul class="navbar-nav ml-auto">
-                    {% if user.is_authenticated %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'app:dashboard' %}">Dashboard</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'logout' %}">Logout</a>
-                    </li>
-                    {% else %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'login' %}">Login</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'app:register' %}">Register</a>
-                    </li>
-                    {% endif %}
-                </ul>
+
+{% block title %}
+    Home Page
+{% endblock %}
+
+{% block extra_nav %}
+    <div class='input-group'>
+        <button class="btn btn-dark px-3" type="submit">Ask</button>
+        <div class="input-group-append">
+            <input type="text" name="q" class="form-control" placeholder="Search" />
+            <div class="input-group-append">
+                <button class="btn btn-dark px-2" type="submit">Search</button>
             </div>
         </div>
-    </nav>
+    </div>
+{% endblock %}
+
+{% block content %}
     <!-- Question List -->
     <div class='container'>
         {% for quest in quests %}
@@ -87,6 +58,5 @@
           </li>
           {% endif %}
         </ul>
-      </nav>
-</body>
-</html>
+    </nav>
+{% endblock %}

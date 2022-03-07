@@ -64,7 +64,7 @@ def questions(request):
 def detail(request, id_):
     quest = Question.objects.get(pk=id_)
     tags = quest.tags.split(',')
-    answers = Answer.objects.filter(question=quest).order_by('id')
+    answers = Answer.objects.filter(question=quest).order_by('-vote_score')
     comments = []
     for answer in answers:
         comments.append(Comment.objects.filter(answer=answer))
