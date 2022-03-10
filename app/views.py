@@ -1,4 +1,6 @@
+from asyncio.windows_events import NULL
 import json
+from pickle import FALSE
 from xml.etree.ElementTree import Comment
 
 from django.contrib import messages
@@ -10,6 +12,8 @@ from django.http import JsonResponse
 from users.forms import CustomUserCreationForm, CustomUserChangeForm
 from .models import Answer, Question, Comment
 
+from vote.models import UP, DOWN
+from .utilities import cast_vote
 
 def landing(request):
     return render(request, "app/index.html")
@@ -60,10 +64,13 @@ def questions(request):
 def detail(request, id_):
     quest = Question.objects.get(pk=id_)
     tags = quest.tags.split(',')
-    answers = Answer.objects.all().order_by('-id')
-    answer = Answer.objects.get(question=quest)
-    comments = Comment.objects.filter(answer=answer).order_by('id')
-    return render(request, 'app/detail.html', {'quest': quest, 'tags': tags, 'answer': answer, 'comments': comments})
+    answers = Answer.objects.filter(question=quest).order_by('-vote_score')
+    comments = []
+    for answer in answers:
+        comments.append(Comment.objects.filter(answer=answer))
+    answers_comments = zip(answers, comments)
+    num_answers = len(answers)
+    return render(request, 'app/detail.html', {'quest': quest, 'tags': tags, 'answers_comments': answers_comments, 'num_answers': num_answers})
 
 def save_comment(request):
     if request.method=='POST':
@@ -77,3 +84,11 @@ def save_comment(request):
             user=user
         )
         return JsonResponse({'bool':True})
+
+def save_vote(request):
+    if request.method=='POST':
+        id = request.POST['id']
+        user_id = request.user.id
+        vote_to = request.POST['vote_to']
+        vote_type = request.POST['vote_type']
+    return JsonResponse({'bool': cast_vote(vote_type, vote_to, user_id, id)})
