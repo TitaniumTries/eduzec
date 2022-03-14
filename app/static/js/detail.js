@@ -36,34 +36,50 @@ $(document).ready(function(){
 
 
 $(document).ready(function(){
-    $('.save-comment').on('click',function(){
-        var _answerid=$(this).data('answer');
-        var _comment=$('.comment-text[id=' + _answerid + ']').val();
+    $('.save-text-btn').on('click',function(){
+        var _id=$(this).data('id');
+        var _text=$(this).siblings('.save-text').val();
+        var _type=$(this).closest('[text_type]').attr('text_type');
         // Ajax starts here i guess
         $.ajax({
-            url:'/save-comment',
+            url:'/save-text',
             type:'post',
             data:{
-                comment:_comment,
-                answerid:_answerid,
+                text:_text,
+                id:_id,
+                type:_type,
                 csrfmiddlewaretoken:csrf_token,
             },
             dataType:'json',
             beforeSend:function(){
-                $('.save-comment').addClass('disabled').text('saving...');
+                $('.save-text-btn[data-id=' + _id + ']').addClass('disabled').text('saving...');
+                //alert(_id + "    " + _text + "    " + _type);
             },
             success:function(res){
                 if(res.bool==true){
-                    $('.comment-text[id=' + _answerid + ']').val('');
-                    // Append Element or somethin
-                    var _html="<div class='card animate__animated animate__fadeInDown'>\
-                        <div class='card-body'>\
-                            <p><a href='#'>" + $('.save-comment').attr('user') + "</a><text> - </text>" + _comment + "</p>\
-                        </div>\
-                    </div>";
-                    $('.comment-wrapper[id=' + _answerid + ']').append(_html);
+                    $('.save-text-btn[data-id=' + _id + ']').siblings('.save-text').val('');
+                    if (_type == "comment") {
+                        // Append Element or somethin
+                        var _html="<div class='card animate__animated animate__fadeInDown'>\
+                            <div class='card-body'>\
+                                <p><a href='#'>" + $('.save-text-btn').attr('user') + "</a><text> - </text>" + _text + "</p>\
+                            </div>\
+                        </div>";
+                        $('.comment-wrapper[id=' + _id + ']').append(_html);
+                    }
+                    else {
+
+                    }
                 }
-                $('.save-comment').removeClass('disabled').text('Comment');
+
+                if (_type == "comment") {
+                    obj = "Comment";
+                }
+                else {
+                    obj = "Answer";
+                }
+
+                $('.save-text-btn[data-id=' + _id + ']').removeClass('disabled').text(obj);
             }
         });
     });

@@ -12,7 +12,7 @@ from users.forms import CustomUserCreationForm, CustomUserChangeForm
 from .models import Answer, Question, Comment
 
 from vote.models import UP, DOWN
-from .utilities import cast_vote
+from .utilities import cast_vote, save_text_help
 
 def landing(request):
     return render(request, "app/index.html")
@@ -71,18 +71,14 @@ def detail(request, id_):
     num_answers = len(answers)
     return render(request, 'app/detail.html', {'quest': quest, 'tags': tags, 'answers_comments': answers_comments, 'num_answers': num_answers})
 
-def save_comment(request):
+def save_text(request):
     if request.method=='POST':
-        comment=request.POST['comment']
-        answerid=request.POST['answerid']
-        answer=Answer.objects.get(pk=answerid)
+        text=request.POST['text']
+        id=request.POST['id']
+        text_type = request.POST['type']
         user=request.user
-        Comment.objects.create(
-            answer=answer,
-            comment=comment,
-            user=user
-        )
-        return JsonResponse({'bool':True})
+
+        return JsonResponse({'bool': save_text_help(text, id, text_type, user)})
 
 def save_vote(request):
     if request.method=='POST':
@@ -90,4 +86,5 @@ def save_vote(request):
         user_id = request.user.id
         vote_to = request.POST['vote_to']
         vote_type = request.POST['vote_type']
-    return JsonResponse({'bool': cast_vote(vote_type, vote_to, user_id, id)})
+
+        return JsonResponse({'bool': cast_vote(vote_type, vote_to, user_id, id)})

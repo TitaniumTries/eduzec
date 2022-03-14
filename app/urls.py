@@ -9,6 +9,6 @@ urlpatterns = [
     path('edit/', views.edit, name='edit_account'),
     path('questions/', views.questions, name='questions'),
     path('detail/<int:id_>', views.detail, name='detail'),
-    path('save-comment', views.save_comment, name='save-comment'),
+    path('save-text', views.save_text, name='save-text'),
     path('save-vote', views.save_vote, name='save-vote'),
 ]

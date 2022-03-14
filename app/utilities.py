@@ -21,3 +21,18 @@ def cast_vote(vote_type, vote_to, user_id, id):
             obj.votes.down(user_id)
     return success
 
+def save_text_help(text, id, text_type, user_id):
+    if text_type == "answer":
+        Answer.objects.create(
+            question=Question.objects.get(pk=id),
+            user=user_id,
+            detail=text
+        )
+    else:
+        Comment.objects.create(
+            answer=Answer.objects.get(pk=id),
+            comment=text,
+            user=user_id
+        )
+    
+    return True

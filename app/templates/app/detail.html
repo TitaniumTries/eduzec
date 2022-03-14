@@ -39,6 +39,19 @@
                 {{quest.detail}}
             </p>
         </div>
+        {% if user.is_authenticated %}
+        <div class="col-1"></div>
+        <div class="col-11">
+        <!-- Answer Section Form -->
+            <div class='card'>
+                <h6 class='card-header'>Answer</h6>
+                <div class='card-body' text_type="answer">
+                    <textarea class='form-control save-text'></textarea>
+                     <button type='button' data-id='{{quest.id}}' class='btn btn-dark my-3 save-text-btn' user="{{ request.user }}">Answer</button>
+                </div>
+            </div>
+        </div>
+        {% endif %}
         {% for answer, comments in answers_comments %}
         {% include 'includes/voting.html' with vote_to='answer' id=answer.id vote_count=answer.votes.count %}
         <div class='col-11'>
@@ -56,9 +69,9 @@
             <!-- Comment Section Form -->
             <div class='card'>
                 <h6 class='card-header'>Comment</h6>
-                <div class='card-body'>
-                    <textarea class='form-control comment-text' id="{{ answer.id }}"></textarea>
-                    <button type='button' data-answer='{{answer.id}}' class='btn btn-dark my-3 save-comment' user="{{ request.user }}">Comment</button>
+                <div class='card-body' text_type="comment">
+                    <textarea class='form-control save-text'></textarea>
+                    <button type='button' data-id='{{answer.id}}' class='btn btn-dark my-3 save-text-btn' user="{{ request.user }}">Comment</button>
                 </div>
             </div>
             {% endif %}
