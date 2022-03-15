@@ -63,7 +63,8 @@ def questions(request):
 def detail(request, id_):
     quest = Question.objects.get(pk=id_)
     tags = quest.tags.split(',')
-    answers = Answer.objects.filter(question=quest).order_by('-vote_score')
+
+    answers = Answer.objects.filter(question=quest).order_by('-vote_score')    
     comments = []
     for answer in answers:
         comments.append(Comment.objects.filter(answer=answer))
@@ -78,7 +79,10 @@ def save_text(request):
         text_type = request.POST['type']
         user=request.user
 
-        return JsonResponse({'bool': save_text_help(text, id, text_type, user)})
+        if text_type == "comment":
+            return render(request, 'includes/single_comment.html', {'comment': save_text_help(request, text, id, text_type, user)})
+        else:
+            return render(request, 'includes/single_answer.html', {'answer': save_text_help(request, text, id, text_type, user)})
 
 def save_vote(request):
     if request.method=='POST':

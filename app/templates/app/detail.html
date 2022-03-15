@@ -39,7 +39,10 @@
                 {{quest.detail}}
             </p>
         </div>
-        {% if user.is_authenticated %}
+    </div>
+
+    {% if user.is_authenticated %}
+    <div class="row write-answer">
         <div class="col-1"></div>
         <div class="col-11">
         <!-- Answer Section Form -->
@@ -51,8 +54,10 @@
                 </div>
             </div>
         </div>
-        {% endif %}
-        {% for answer, comments in answers_comments %}
+    </div>
+    {% endif %}
+    {% for answer, comments in answers_comments %}
+    <div class="row">
         {% include 'includes/voting.html' with vote_to='answer' id=answer.id vote_count=answer.votes.count %}
         <div class='col-11'>
             <p class='mt-1'>
@@ -86,7 +91,12 @@
                 {% endfor %}
             </div>
         </div>
-        {% endfor %}
     </div>
+    {% empty %}
+        <div class="col-1"></div>
+        <div class="col-11">
+            <p>There are no answers yet.</p>
+        </div>
+    {% endfor %}
 </div>
 {% endblock %}

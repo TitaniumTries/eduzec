@@ -50,26 +50,16 @@ $(document).ready(function(){
                 type:_type,
                 csrfmiddlewaretoken:csrf_token,
             },
-            dataType:'json',
             beforeSend:function(){
                 $('.save-text-btn[data-id=' + _id + ']').addClass('disabled').text('saving...');
-                //alert(_id + "    " + _text + "    " + _type);
             },
-            success:function(res){
-                if(res.bool==true){
-                    $('.save-text-btn[data-id=' + _id + ']').siblings('.save-text').val('');
-                    if (_type == "comment") {
-                        // Append Element or somethin
-                        var _html="<div class='card animate__animated animate__fadeInDown'>\
-                            <div class='card-body'>\
-                                <p><a href='#'>" + $('.save-text-btn').attr('user') + "</a><text> - </text>" + _text + "</p>\
-                            </div>\
-                        </div>";
-                        $('.comment-wrapper[id=' + _id + ']').append(_html);
-                    }
-                    else {
-
-                    }
+            success:function(data){
+                $('.save-text-btn[data-id=' + _id + ']').siblings('.save-text').val('');
+                if (_type == "comment") {
+                    $('.comment-wrapper[id=' + _id + ']').prepend(data);
+                }
+                else {
+                    $('.write-answer').after(data);
                 }
 
                 if (_type == "comment") {
