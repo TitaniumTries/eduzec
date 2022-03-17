@@ -3,6 +3,7 @@ from pickle import FALSE
 from xml.etree.ElementTree import Comment
 
 from django.contrib import messages
+from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.shortcuts import render, redirect
@@ -14,20 +15,18 @@ from .models import Answer, Question, Comment
 from vote.models import UP, DOWN
 from .utilities import cast_vote, save_text_help
 
+from django.views import View
+from django.views.generic.edit import CreateView
+from django.urls import reverse_lazy
+
 def landing(request):
     return render(request, "app/index.html")
 
-
-def register(request):
-    if request.method == "POST":
-        form = CustomUserCreationForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('app:login')
-    else:
-        form = CustomUserCreationForm()
-    return render(request, 'app/register.html', {'form': form})
-
+class SignUpView(SuccessMessageMixin, CreateView):
+    template_name = 'app/register.html'
+    success_url = reverse_lazy('login')
+    form_class = CustomUserCreationForm
+    success_message = "%(username)s, your profile was created successfully!"
 
 @login_required
 def dashboard(request):
