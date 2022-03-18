@@ -1,4 +1,5 @@
 # eduzec
-Just a project that may or may not happen
-I hope it works out though!
-I just, have a feeling it won't go as smooth as we think...
+A forum site mainly focused on education.
+
+Check it out here: https://eduzec.herokuapp.com/
+

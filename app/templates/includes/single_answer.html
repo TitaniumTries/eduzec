@@ -1,0 +1,15 @@
+<div class="row animate__animated animate__fadeInDown">
+    {% include 'includes/voting.html' with vote_to='answer' id=answer.id vote_count=answer.votes.count %}
+    <div class='col-11'>
+        <p class='mt-1'>
+            {{answer.detail}}
+        </p>
+        <hr/>
+        <p>
+            <span class='mr-2'>{{answer.add_time|date:'d/m/y'}}</span>
+            <text>by</text>
+            <a href='#' class='mr-2'>{{ answer.user }}</a>
+            <span>0 comments</span>
+        </p>
+    </div>
+</div>

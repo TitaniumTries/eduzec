@@ -1,12 +1,13 @@
 {% extends "base.html" %}
-
+{% load crispy_forms_filters %}
 {% block title %}Edit your profile{% endblock %}
+{% load crispy_forms_tags %}
 
 {% block content %}
     <h1>Edit you profile</h1>
     <form method="post">
-        {{ form.as_p }}
         {% csrf_token %}
+        {{ form|crispy }}
         <input type="submit" value="Update Profile" />
     </form>
 {% endblock %}
