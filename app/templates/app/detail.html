@@ -23,7 +23,7 @@
         <span class='mr-2'>{{quest.add_time|date:'d/m/y'}}</span>
         <text>by</text>
         <a href='#' class='ml-2'>{{quest.user}}</a>
-        <span>{{ num_answers }} answers</span>
+        <span>{{ quest.count_of_answers }} answers</span>
     </p>
     <p>
         tags:
@@ -55,6 +55,11 @@
             </div>
         </div>
     </div>
+    {% else %}
+        <div class="col-1"></div>
+        <div class="col-11">
+            <p>Log in to answer or comment.</p>
+        </div>
     {% endif %}
     {% for answer, comments in answers_comments %}
     <div class="row">

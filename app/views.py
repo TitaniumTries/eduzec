@@ -1,26 +1,21 @@
-import json
-from pickle import FALSE
-from xml.etree.ElementTree import Comment
-
-from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
-from django.contrib.auth.decorators import login_required
-from django.core.paginator import Paginator
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.http import JsonResponse
+from django.views import View
+from django.views.generic.edit import CreateView, UpdateView
+from django.views.generic.list import ListView
+from django.views.generic import DetailView
+from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import get_object_or_404
+from django.db.models import Count
 
 from users.forms import CustomUserCreationForm, CustomUserChangeForm
+from users.models import CustomUser
 from .models import Answer, Question, Comment
 
 from vote.models import UP, DOWN
 from .utilities import cast_vote, save_text_help
-
-from django.views import View
-from django.views.generic.edit import CreateView
-from django.urls import reverse_lazy
-
-def landing(request):
-    return render(request, "app/index.html")
 
 class SignUpView(SuccessMessageMixin, CreateView):
     template_name = 'app/register.html'
@@ -28,63 +23,69 @@ class SignUpView(SuccessMessageMixin, CreateView):
     form_class = CustomUserCreationForm
     success_message = "%(username)s, your profile was created successfully!"
 
-@login_required
-def dashboard(request):
-    return render(request, 'app/dashboard.html')
+class EditView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+    template_name = 'app/edit_account.html'
+    success_url = reverse_lazy('app:edit_account')
+    form_class = CustomUserChangeForm
+    success_message = "Successfully updated profile!"
 
+    def get_object(self):
+        return get_object_or_404(CustomUser, pk=self.request.user.id)
 
-@login_required
-def edit(request):
-    if request.method == "POST":
-        form = CustomUserChangeForm(instance=request.user, data=request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(request, "Profile updated successfully")
-        else:
-            messages.error(request, "Error updating your profile. Check the form below.")
-    else:
-        form = CustomUserChangeForm(instance=request.user)
-    return render(request, "app/edit_account.html", {"form": form})
+class QuestionsView(ListView):
+    model = Question
+    template_name = 'app/questions.html'
+    context_object_name = "quests"
+    paginate_by = 5
 
+    def get_queryset(self):
+        qs = super(QuestionsView, self).get_queryset()
 
-def questions(request):
-    if 'q' in request.GET:
-        q = request.GET['q']
-        quests = Question.objects.filter(title__icontains=q).order_by('-id')
-    else:
-        quests = Question.objects.all().order_by('-id')
-    paginator = Paginator(quests, 5)
-    page_num = request.GET.get('page', 1)
-    quests = paginator.page(page_num)
-    return render(request, 'app/questions.html', {'quests': quests})
+        search = self.request.GET.get('q')
+        if search:
+            qs = qs.filter(title__icontains=search)
 
+        qs = qs.order_by("-id")
+        qs = qs.annotate(count_of_answers=Count('answer'))
+        return qs
 
-def detail(request, id_):
-    quest = Question.objects.get(pk=id_)
-    tags = quest.tags.split(',')
+class QuestionDetailView(DetailView):
+    model = Question
+    template_name = 'app/detail.html'
+    context_object_name = 'quest'
 
-    answers = Answer.objects.filter(question=quest).order_by('-vote_score')    
-    comments = []
-    for answer in answers:
-        comments.append(Comment.objects.filter(answer=answer))
-    answers_comments = zip(answers, comments)
-    num_answers = len(answers)
-    return render(request, 'app/detail.html', {'quest': quest, 'tags': tags, 'answers_comments': answers_comments, 'num_answers': num_answers})
+    def get_context_data(self, **kwargs):
+        context = super(QuestionDetailView, self).get_context_data(**kwargs)
 
-def save_text(request):
-    if request.method=='POST':
+        context['tags'] = self.object.tags.split(',')
+        answers = Answer.objects.filter(question=self.object).order_by('-vote_score')    
+        comments = []
+        for answer in answers:
+            comments.append(Comment.objects.filter(answer=answer))
+        context['answers_comments'] = zip(answers, comments)
+        
+        return context
+
+    def get_queryset(self):
+        qs = super(QuestionDetailView, self).get_queryset()
+        qs = qs.annotate(count_of_answers=Count('answer'))
+
+        return qs
+
+class WriteCommentAnswerView(View):
+    def post(self, request):
         text=request.POST['text']
         id=request.POST['id']
         text_type = request.POST['type']
         user=request.user
 
         if text_type == "comment":
-            return render(request, 'includes/single_comment.html', {'comment': save_text_help(request, text, id, text_type, user)})
+            return render(request, 'includes/single_comment.html', {'comment': save_text_help(text, id, text_type, user)})
         else:
-            return render(request, 'includes/single_answer.html', {'answer': save_text_help(request, text, id, text_type, user)})
+            return render(request, 'includes/single_answer.html', {'answer': save_text_help(text, id, text_type, user)})
 
-def save_vote(request):
-    if request.method=='POST':
+class SaveVoteView(LoginRequiredMixin, View):
+    def post(self, request):
         id = request.POST['id']
         user_id = request.user.id
         vote_to = request.POST['vote_to']

@@ -1,14 +1,16 @@
 from django.urls import path, include
+from django.contrib.auth.decorators import login_required
 from . import views
+from django.views.generic import TemplateView
 
 urlpatterns = [
-    path('', views.landing, name='landing'),
+    path('', TemplateView.as_view(template_name="app/index.html"), name='landing'),
     path('register/', views.SignUpView.as_view(), name='register'),
     path('', include('django.contrib.auth.urls')),
-    path('dashboard/', views.dashboard, name='dashboard'),
-    path('edit/', views.edit, name='edit_account'),
-    path('questions/', views.questions, name='questions'),
-    path('detail/<int:id_>', views.detail, name='detail'),
-    path('save-text', views.save_text, name='save-text'),
-    path('save-vote', views.save_vote, name='save-vote'),
+    path('dashboard/', login_required(TemplateView.as_view(template_name="app/dashboard.html")), name='dashboard'),
+    path('edit/', views.EditView.as_view(), name='edit_account'),
+    path('questions/', views.QuestionsView.as_view(), name='questions'),
+    path('detail/<pk>', views.QuestionDetailView.as_view(), name='detail'),
+    path('save-text', views.WriteCommentAnswerView.as_view(), name='save-text'),
+    path('save-vote', views.SaveVoteView.as_view(), name='save-vote'),
 ]
