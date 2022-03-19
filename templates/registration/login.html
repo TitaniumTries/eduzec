@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load crispy_forms_filters %}
+{% block title %}Login - Eduzec{% endblock %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <form method='POST' class='form-group'>
+        {% csrf_token %}
+        {{form|crispy}}
+        <p>Don't have an account? Create one <a href='{% url "users:register" %}'>here.</a></p>
+        <button type='submit' class='btn btn-success'>Login</button>
+        
+    </form>
+
+{% endblock %}
