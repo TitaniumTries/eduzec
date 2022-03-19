@@ -1,0 +1,140 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Detail Page{% endblock %}</title>
+    <!-- Animate 4 -->
+    <link rel="stylesheet" href="{% static 'css/animate.min.css' %}"/>
+    <!-- Bootstrap 4 -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}"/>
+    <!-- Font Awesome 4 -->
+    <link rel="stylesheet" href="{% static 'fa4/css/font-awesome.min.css' %}"/>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}"/>
+    <!-- Website Icon -->
+    <link rel="icon" href="{% static 'images/edulogo.png' %}"/>
+    <!-- Jquery -->
+    <script src="{% static 'js/jquery-3.5.1.min.js' %}"></script>
+    <!-- Bootstrap 4 Js -->
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    {% block static %} {% endblock %}
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="{% url 'landing' %}">
+            <svg width="130" height="36" viewBox="0 0 130 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <g clip-path="url(#clip0_42_103)">
+                    <rect width="30" height="5" transform="translate(25 30) rotate(-90)"
+                          fill="url(#paint0_linear_42_103)"></rect>
+                    <rect width="30" height="5" transform="translate(-5)" fill="url(#paint1_linear_42_103)"></rect>
+                    <rect width="7" height="5" rx="2.5" transform="matrix(1 0 0 -1 0 17)"
+                    fill="url(#paint2_linear_42_103)"></rect>
+                    <rect width="30" height="5" transform="translate(0 30)" fill="url(#paint3_linear_42_103)"/>
+                    <rect width="15" height="5" rx="2.5" transform="matrix(1 0 0 -1 0 26)"
+                    fill="url(#paint4_linear_42_103)"></rect>
+                </g>
+                <symbol id="eduzec"><path d="M42.5 35.25C41.5667 35.25 40.7 35.075 39.9 34.725C39.1 34.3583 38.4083 33.8667 37.825 33.25C37.2417 32.6167 36.7833 31.8917 36.45 31.075C36.1333 30.2583 35.975 29.3833 35.975 28.45C35.975 27.2333 36.25 26.1167 36.8 25.1C37.3667 24.0833 38.1417 23.275 39.125 22.675C40.1083 22.0583 41.225 21.75 42.475 21.75C43.7583 21.75 44.875 22.0583 45.825 22.675C46.7917 23.2917 47.55 24.1083 48.1 25.125C48.65 26.125 48.925 27.225 48.925 28.425C48.925 28.5583 48.925 28.6917 48.925 28.825C48.925 28.9417 48.9167 29.0333 48.9 29.1H37.75C37.8333 30.0333 38.0917 30.8667 38.525 31.6C38.975 32.3167 39.55 32.8917 40.25 33.325C40.9667 33.7417 41.7417 33.95 42.575 33.95C43.425 33.95 44.225 33.7333 44.975 33.3C45.7417 32.8667 46.275 32.3 46.575 31.6L48.05 32C47.7833 32.6167 47.375 33.175 46.825 33.675C46.275 34.175 45.625 34.5667 44.875 34.85C44.1417 35.1167 43.35 35.25 42.5 35.25ZM37.7 27.875H47.325C47.2583 26.925 47 26.0917 46.55 25.375C46.1167 24.6583 45.5417 24.1 44.825 23.7C44.125 23.2833 43.35 23.075 42.5 23.075C41.65 23.075 40.875 23.2833 40.175 23.7C39.475 24.1 38.9 24.6667 38.45 25.4C38.0167 26.1167 37.7667 26.9417 37.7 27.875ZM51.9229 28.525C51.9229 27.2917 52.1729 26.1667 52.6729 25.15C53.1895 24.1167 53.8979 23.2917 54.7979 22.675C55.6979 22.0583 56.7229 21.75 57.8729 21.75C58.9562 21.75 59.9229 22.0417 60.7729 22.625C61.6395 23.1917 62.3145 23.8833 62.7979 24.7V16.75H64.4979V32.95C64.4979 33.1833 64.5479 33.3583 64.6479 33.475C64.7479 33.575 64.8979 33.6333 65.0979 33.65V35C64.7645 35.05 64.5062 35.0667 64.3229 35.05C63.9729 35.0333 63.6645 34.8917 63.3979 34.625C63.1312 34.3583 62.9979 34.0667 62.9979 33.75V32.475C62.4812 33.325 61.7812 34 60.8979 34.5C60.0145 35 59.0979 35.25 58.1479 35.25C57.2479 35.25 56.4145 35.0667 55.6479 34.7C54.8979 34.3333 54.2395 33.8333 53.6729 33.2C53.1229 32.5667 52.6895 31.85 52.3729 31.05C52.0729 30.2333 51.9229 29.3917 51.9229 28.525ZM62.7979 30.525V26.5C62.5812 25.9 62.2312 25.3583 61.7479 24.875C61.2645 24.375 60.7145 23.9833 60.0979 23.7C59.4979 23.4 58.8979 23.25 58.2979 23.25C57.5979 23.25 56.9645 23.4 56.3979 23.7C55.8312 23.9833 55.3395 24.375 54.9229 24.875C54.5229 25.375 54.2145 25.9417 53.9979 26.575C53.7812 27.2083 53.6729 27.8583 53.6729 28.525C53.6729 29.225 53.7895 29.8917 54.0229 30.525C54.2729 31.1583 54.6229 31.725 55.0729 32.225C55.5229 32.7083 56.0395 33.0833 56.6229 33.35C57.2062 33.6167 57.8395 33.75 58.5229 33.75C58.9562 33.75 59.4062 33.6667 59.8729 33.5C60.3395 33.3333 60.7812 33.1083 61.1979 32.825C61.6312 32.525 61.9895 32.175 62.2729 31.775C62.5562 31.375 62.7312 30.9583 62.7979 30.525ZM69.4746 29.625V21.975H71.1746V29.325C71.1746 30.8083 71.4246 31.9167 71.9246 32.65C72.4413 33.3833 73.1996 33.75 74.1996 33.75C74.8663 33.75 75.5079 33.6083 76.1246 33.325C76.7579 33.025 77.3163 32.6083 77.7996 32.075C78.2829 31.525 78.6496 30.8917 78.8996 30.175V21.975H80.5996V32.95C80.5996 33.1833 80.6496 33.3583 80.7496 33.475C80.8496 33.575 80.9996 33.6333 81.1996 33.65V35C80.9996 35.0167 80.8413 35.025 80.7246 35.025C80.6079 35.0417 80.4996 35.05 80.3996 35.05C80.0663 35.0167 79.7746 34.8833 79.5246 34.65C79.2913 34.4167 79.1663 34.1333 79.1496 33.8L79.0996 32.05C78.5329 33.05 77.7579 33.8333 76.7746 34.4C75.8079 34.9667 74.7579 35.25 73.6246 35.25C72.2579 35.25 71.2246 34.775 70.5246 33.825C69.8246 32.875 69.4746 31.475 69.4746 29.625ZM84.5934 33.85L93.3184 23.25H84.7934V21.975H95.2434V23.125L86.5684 33.725H95.2184V35H84.5934V33.85ZM104.604 35.25C103.671 35.25 102.804 35.075 102.004 34.725C101.204 34.3583 100.513 33.8667 99.9295 33.25C99.3462 32.6167 98.8878 31.8917 98.5545 31.075C98.2378 30.2583 98.0795 29.3833 98.0795 28.45C98.0795 27.2333 98.3545 26.1167 98.9045 25.1C99.4712 24.0833 100.246 23.275 101.229 22.675C102.213 22.0583 103.329 21.75 104.579 21.75C105.863 21.75 106.979 22.0583 107.929 22.675C108.896 23.2917 109.654 24.1083 110.204 25.125C110.754 26.125 111.029 27.225 111.029 28.425C111.029 28.5583 111.029 28.6917 111.029 28.825C111.029 28.9417 111.021 29.0333 111.004 29.1H99.8545C99.9378 30.0333 100.196 30.8667 100.629 31.6C101.079 32.3167 101.654 32.8917 102.354 33.325C103.071 33.7417 103.846 33.95 104.679 33.95C105.529 33.95 106.329 33.7333 107.079 33.3C107.846 32.8667 108.379 32.3 108.679 31.6L110.154 32C109.888 32.6167 109.479 33.175 108.929 33.675C108.379 34.175 107.729 34.5667 106.979 34.85C106.246 35.1167 105.454 35.25 104.604 35.25ZM99.8045 27.875H109.429C109.363 26.925 109.104 26.0917 108.654 25.375C108.221 24.6583 107.646 24.1 106.929 23.7C106.229 23.2833 105.454 23.075 104.604 23.075C103.754 23.075 102.979 23.2833 102.279 23.7C101.579 24.1 101.004 24.6667 100.554 25.4C100.121 26.1167 99.8712 26.9417 99.8045 27.875ZM120.552 35.25C119.602 35.25 118.727 35.075 117.927 34.725C117.144 34.3583 116.452 33.8583 115.852 33.225C115.269 32.5917 114.811 31.8667 114.477 31.05C114.161 30.2333 114.002 29.3667 114.002 28.45C114.002 27.2167 114.277 26.0917 114.827 25.075C115.377 24.0583 116.144 23.25 117.127 22.65C118.111 22.05 119.244 21.75 120.527 21.75C121.744 21.75 122.819 22.0333 123.752 22.6C124.686 23.15 125.377 23.9 125.827 24.85L124.177 25.375C123.811 24.7083 123.294 24.1917 122.627 23.825C121.977 23.4417 121.252 23.25 120.452 23.25C119.586 23.25 118.794 23.475 118.077 23.925C117.361 24.375 116.786 24.9917 116.352 25.775C115.936 26.5583 115.727 27.45 115.727 28.45C115.727 29.4333 115.944 30.325 116.377 31.125C116.811 31.925 117.386 32.5667 118.102 33.05C118.819 33.5167 119.611 33.75 120.477 33.75C121.044 33.75 121.586 33.65 122.102 33.45C122.636 33.25 123.094 32.9833 123.477 32.65C123.877 32.3 124.144 31.925 124.277 31.525L125.952 32.025C125.719 32.6417 125.327 33.2 124.777 33.7C124.244 34.1833 123.611 34.5667 122.877 34.85C122.161 35.1167 121.386 35.25 120.552 35.25Z"
+                      fill="url(#paint5_linear_42_103)"></path></symbol>
+
+                <defs>
+                    <linearGradient id="paint0_linear_42_103" x1="-14.25" y1="-29" x2="31.143" y2="-17.4273"
+                                    gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#00FF00"></stop>
+                        <stop offset="1" stop-color="#00FFFF"></stop>
+                    </linearGradient>
+                    <linearGradient id="paint1_linear_42_103" x1="-1.17391e-06" y1="49.5" x2="-3.59469e-05" y2="2.50003"
+                                    gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#00FF00"></stop>
+                        <stop offset="1" stop-color="#00FFFF"></stop>
+                    </linearGradient>
+                    <linearGradient id="paint2_linear_42_103" x1="14.525" y1="-2.66667" x2="0.341614" y2="5.58704"
+                                    gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#00FF00"></stop>
+                        <stop offset="1" stop-color="#00FFFF"></stop>
+                    </linearGradient>
+                    <linearGradient id="paint3_linear_42_103" x1="3.45" y1="2.5" x2="37.9733" y2="-13.0648"
+                                    gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#00FF00"></stop>
+                        <stop offset="1" stop-color="#00FFFF"></stop>
+                    </linearGradient>
+                    <linearGradient id="paint4_linear_42_103" x1="1.20699e-06" y1="5" x2="17.28" y2="-7.96"
+                                    gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#00FFFF"></stop>
+                        <stop offset="1" stop-color="#00FF00"></stop>
+                    </linearGradient>
+                    <linearGradient id="paint5_linear_42_103" x1="41.338" y1="9.05128" x2="177.269" y2="107.986"
+                                    gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#00FFFF"></stop>
+                        <stop offset="1" stop-color="#00FF00"></stop>
+                    </linearGradient>
+                    <clipPath id="clip0_42_103">
+                        <rect width="30" height="35" rx="5" fill="white"></rect>
+                    </clipPath>
+                </defs>
+            </svg>
+        </a>
+        <div class="navbar-brand">
+            {% if user.is_authenticated %}
+                {{ request.user.username }}
+            {% else %}
+                Guest
+            {% endif %}
+        </div>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            
+            
+            <ul class="navbar-nav ml-auto">
+                {% if user.is_authenticated %}
+                    {% block extra_nav %} {% endblock %}
+                    {% block nav %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'users:dashboard' %}">Dashboard</a>
+                        </li>
+                    {% endblock %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'users:register' %}">Register</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+{% if messages %}
+     {% for message in messages %}
+         <div class="text-center alert alert-{{ message.tags }}">
+             {{ message|safe }}
+         </div>
+     {% endfor %}
+ {% endif %}
+{% block content %}
+{% endblock %}
+<div class="container">
+    <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+        <p class="col-md-4 mb-0 text-muted">&copy; 2022 Eduzec</p>
+
+        <ul class="nav col-md-4 justify-content-end">
+            <li class="nav-item"><a href="{% url 'users:dashboard' %}" class="nav-link px-2 text-muted">Home</a></li>
+            <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Features</a></li>
+            <li class="nav-item"><a href="{% url 'users:register' %}" class="nav-link px-2 text-muted">Register</a></li>
+            <li class="nav-item"><a href="{% url 'login' %}" class="nav-link px-2 text-muted">Login</a></li>
+            <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">About</a></li>
+        </ul>
+    </footer>
+</div>
+
+</body>
+</html>
