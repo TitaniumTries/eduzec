@@ -1,5 +1,7 @@
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django import forms
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UsernameField
 from django.forms import ModelForm
+from django.utils.translation import gettext_lazy as _
 
 from .models import CustomUser
 
@@ -17,4 +19,14 @@ class CustomUserChangeForm(ModelForm):
 
 
 class CustomUserAuthenticationForm(AuthenticationForm):
-    pass
+    username = UsernameField(
+        label='Username or Email',
+        widget=forms.TextInput(attrs={'autofocus': True})
+    )
+    error_messages = {
+        **AuthenticationForm.error_messages,
+        'invalid_login': _(
+            "Please enter a correct username or email, and password. Note that both fields may be case-sensitive."
+        ),
+    }
+

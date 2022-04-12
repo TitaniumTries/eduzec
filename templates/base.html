@@ -102,11 +102,11 @@
                         </li>
                     {% endblock %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                        <a class="nav-link" href="{% url 'users:logout' %}">Logout</a>
                     </li>
                 {% else %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'login' %}">Login</a>
+                        <a class="nav-link" href="{% url 'users:login' %}">Login</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'users:register' %}">Register</a>
@@ -130,10 +130,14 @@
         <p class="col-md-4 mb-0 text-muted">&copy; 2022 Eduzec</p>
 
         <ul class="nav col-md-4 justify-content-end">
-            <li class="nav-item"><a href="{% url 'users:dashboard' %}" class="nav-link px-2 text-muted">Dashboard</a></li>
             <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Features</a></li>
-            <li class="nav-item"><a href="{% url 'users:register' %}" class="nav-link px-2 text-muted">Register</a></li>
-            <li class="nav-item"><a href="{% url 'login' %}" class="nav-link px-2 text-muted">Login</a></li>
+            {% if user.is_authenticated %}
+                <li class="nav-item"><a href="{% url 'users:dashboard' %}" class="nav-link px-2 text-muted">Dashboard</a></li>
+                <li class="nav-item"><a href="{% url 'users:logout' %}" class="nav-link px-2 text-muted">Logout</a></li>
+            {% else %}
+                <li class="nav-item"><a href="{% url 'users:register' %}" class="nav-link px-2 text-muted">Register</a></li>
+                <li class="nav-item"><a href="{% url 'users:login' %}" class="nav-link px-2 text-muted">Login</a></li>
+            {% endif %}
             <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">About</a></li>
         </ul>
     </footer>

@@ -7,6 +7,10 @@ from django.core.exceptions import ValidationError
 from .forms import CustomUserChangeForm, CustomUserCreationForm
 from django.contrib.auth.admin import UserAdmin
 
+from django.contrib.admin.forms import AdminAuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, UsernameField
+from django.utils.translation import gettext_lazy as _
+
 # Register your models here.
 
 class UserCreationForm(forms.ModelForm):
@@ -46,6 +50,21 @@ class UserChangeForm(forms.ModelForm):
         model = CustomUser
         fields = ('username', 'password', 'email', 'is_active', 'is_staff', )
 
+class CustomAdminAuthenticationForm(AdminAuthenticationForm):
+    """
+    A custom authentication form used in the admin app.
+    """
+    error_messages = {
+        **AuthenticationForm.error_messages,
+        'invalid_login': _(
+            "Please enter a correct username or email, and password. Note that both fields may be case-sensitive."
+        ),
+    }
+
+    username = UsernameField(
+        label='Username or Email',
+        widget=forms.TextInput(attrs={'autofocus': True})
+    )
 
 class CustomUserAdmin(UserAdmin):
     model = CustomUser
@@ -63,3 +82,4 @@ class CustomUserAdmin(UserAdmin):
 
 admin.site.register(CustomUser, CustomUserAdmin)
 admin.site.unregister(Group)
+admin.site.login_form = CustomAdminAuthenticationForm
