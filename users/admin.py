@@ -4,7 +4,6 @@ from django.contrib.auth.models import Group
 from .models import CustomUser
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.core.exceptions import ValidationError
-from .forms import CustomUserChangeForm, CustomUserCreationForm
 from django.contrib.auth.admin import UserAdmin
 
 from django.contrib.admin.forms import AdminAuthenticationForm
@@ -21,7 +20,7 @@ class UserCreationForm(forms.ModelForm):
 
     class Meta:
         model = CustomUser
-        fields = ('username', 'email', )
+        fields = () # necessary attribute
 
     def clean_password2(self):
         # Check that the two password entries match
@@ -48,7 +47,7 @@ class UserChangeForm(forms.ModelForm):
 
     class Meta:
         model = CustomUser
-        fields = ('username', 'password', 'email', 'is_active', 'is_staff', )
+        fields = () # necessary attribute
 
 class CustomAdminAuthenticationForm(AdminAuthenticationForm):
     """
@@ -76,6 +75,25 @@ class CustomUserAdmin(UserAdmin):
             'classes': ('wide',), #The classes key sets any custom CSS classes we want to apply to the form sectoin
             'fields': ('username', 'email', 'password1', 'password2'),
         }),
+    )
+
+    fieldsets = (
+        (None, {"fields": ("username", "password")}),
+        (_("Personal info"), {"fields": ("first_name", "last_name", "email")}),
+        (
+            _("Permissions"),
+            {
+                "fields": (
+                    "is_active",
+                    "is_staff",
+                    "is_superuser",
+                    "groups",
+                    "user_permissions",
+                ),
+            },
+        ),
+        (_("Important dates"), {"fields": ("last_login", "date_joined")}),
+        (_("Email details"), {"fields": ("hide_email", "email_verified")}),
     )
 
     #specify fieldsets to veiw any special user creation fields you've added in your CustomUser model.

@@ -58,7 +58,7 @@ STATICFILES_DIRS = (
 
 AUTH_USER_MODEL = 'users.CustomUser'
 AUTHENTICATION_BACKENDS = (
-    'django.contrib.auth.backends.ModelBackend',
+    #'django.contrib.auth.backends.ModelBackend', # comment out later to allow only users with verified emails to sign in. Left for development purposes.
     'users.backends.CustomUserModelBackend',
 )
 
