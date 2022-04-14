@@ -97,6 +97,9 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'users:dashboard' %}">Dashboard</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'forum:ask' %}">Ask</a>
+                        </li>
                     {% endblock %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'logout' %}">Logout</a>
@@ -127,7 +130,7 @@
         <p class="col-md-4 mb-0 text-muted">&copy; 2022 Eduzec</p>
 
         <ul class="nav col-md-4 justify-content-end">
-            <li class="nav-item"><a href="{% url 'users:dashboard' %}" class="nav-link px-2 text-muted">Home</a></li>
+            <li class="nav-item"><a href="{% url 'users:dashboard' %}" class="nav-link px-2 text-muted">Dashboard</a></li>
             <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Features</a></li>
             <li class="nav-item"><a href="{% url 'users:register' %}" class="nav-link px-2 text-muted">Register</a></li>
             <li class="nav-item"><a href="{% url 'login' %}" class="nav-link px-2 text-muted">Login</a></li>

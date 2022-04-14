@@ -1,17 +1,20 @@
 from django.conf import settings
 from django.db import models
 from vote.models import VoteModel
-
+from django.urls import reverse
 from users.models import CustomUser
-
 
 # This is the question model
 class Question(VoteModel, models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True, null=True)
     title = models.CharField(max_length=30)
     detail = models.TextField()
     tags = models.TextField(default='')
     add_time = models.DateTimeField(auto_now_add=True)
+    
+    def get_absolute_url(self):
+        return f"/questions/"
+    
 
     def __str__(self):
         return self.title

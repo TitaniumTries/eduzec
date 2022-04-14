@@ -1,12 +1,16 @@
 from django.shortcuts import render
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseRedirect
 from django.views import View
 from django.views.generic.list import ListView
-from django.views.generic import DetailView
+from django.views.generic import DetailView, CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Count
-
-from .models import Answer, Question, Comment
+from requests import request
+from .forms import QuestionForm
+from django.contrib.messages.views import SuccessMessageMixin
+from django.urls import reverse, reverse_lazy
+from . import models
+from .models import Question, Answer, Comment
 
 from vote.models import UP, DOWN
 from .utilities import cast_vote, save_text_help
@@ -50,6 +54,20 @@ class QuestionDetailView(DetailView):
         qs = qs.annotate(count_of_answers=Count('answer'))
 
         return qs
+    
+
+class AskForm(SuccessMessageMixin , CreateView):
+    template_name = 'forum/ask-question.html'
+    model = Question
+    form_class = QuestionForm
+    success_message = 'Success!'
+    
+    
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        form.save()
+        return super(AskForm, self).form_valid(form)
+
 
 class WriteCommentAnswerView(View):
     def post(self, request):
