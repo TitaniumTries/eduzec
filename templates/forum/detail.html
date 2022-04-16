@@ -23,7 +23,7 @@
         <span class='mr-2'>{{quest.add_time|date:'d/m/y'}}</span>
         <text>by</text>
         <a href='#' class='ml-2'>{{quest.user}}</a>
-        <span>{{ quest.count_of_answers }} answers</span>
+        <button type='button' class='btn btn-dark'><a href='{% url 'forum:answer_with_pk' pk=quest.id %}'>Answer</a></button>
     </p>
     <p>
         tags:
@@ -46,15 +46,6 @@
         <div class="col-1"></div>
         <div class="col-11">
         <!-- Answer Section Form -->
-            <div class='card'>
-                <h6 class='card-header'>Answer</h6>
-                <div class='card-body' text_type="answer">
-                    <textarea class='form-control save-text'></textarea>
-                     <button type='button' data-id='{{quest.id}}' class='btn btn-dark my-3 save-text-btn' user="{{ request.user }}">Answer</button>
-                </div>
-            </div>
-        </div>
-    </div>
     {% else %}
         <div class="col-1"></div>
         <div class="col-11">

@@ -27,6 +27,9 @@ class Answer(VoteModel, models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     detail = models.TextField()
     add_time = models.DateTimeField(auto_now_add=True)
+    
+    def get_absolute_url(self):
+        return f"/questions/"
 
     def __str__(self):
         return self.detail
