@@ -6,7 +6,7 @@ from django.views.generic import DetailView, CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Count
 from requests import request
-from .forms import QuestionForm
+from .forms import QuestionForm, AnswerForm
 from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse, reverse_lazy
 from . import models
@@ -67,6 +67,18 @@ class AskForm(SuccessMessageMixin , CreateView):
         form.instance.user = self.request.user
         form.save()
         return super(AskForm, self).form_valid(form)
+    
+class AnswerForm(SuccessMessageMixin, CreateView):
+    template_name = 'forum/answer-question.html'
+    model = Answer
+    form_class = AnswerForm
+    success_message = 'Success!'
+
+    def form_valid(self, form, pk=None):
+        form.instance.question_id = self.kwargs['pk']
+        form.instance.user = self.request.user
+        form.save()
+        return super().form_valid(form)
 
 
 class WriteCommentAnswerView(View):
