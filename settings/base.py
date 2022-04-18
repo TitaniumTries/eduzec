@@ -14,6 +14,7 @@ from pathlib import Path
 import os
 from django.contrib.messages import constants as messages
 from dotenv import load_dotenv
+import sys
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -29,6 +30,9 @@ SECRET_KEY = None
 DEBUG = None
 
 ALLOWED_HOSTS = ["*"]
+
+#Testing flag
+TESTING = len(sys.argv) > 1 and sys.argv[1] == 'test'
 
 # Custom settings
 CRISPY_TEMPLATE_PACK = 'bootstrap4'

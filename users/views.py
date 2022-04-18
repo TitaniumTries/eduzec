@@ -1,3 +1,4 @@
+import re
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib import messages
 from django.views.generic.edit import CreateView, UpdateView
@@ -10,6 +11,7 @@ from django.contrib.auth.views import LoginView
 from users.models import CustomUser
 
 from django.contrib.auth import login as auth_login
+from django.contrib.auth.views import logout_then_login
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
@@ -18,6 +20,14 @@ from .utilities import generate_token
 from django.core.mail import EmailMessage
 from django.conf import settings
 import threading
+
+class EmailThread(threading.Thread):
+    def __init__(self, email):
+        self.email = email
+        threading.Thread.__init__(self)
+
+    def run(self):
+        self.email.send()
 
 def send_verification_email(request, user):
     current_site = get_current_site(request)
@@ -34,19 +44,21 @@ def send_verification_email(request, user):
                          to=[user.email]
                          )
 
-    email.send()
+    if not settings.TESTING: # Removing this line would not send emails in tests, since Django overrides the specified email client to its default one to prevent this behavior in test. This can be overriden.
+        EmailThread(email).start()
 
 class SignUpView(SuccessMessageMixin, CreateView):
     template_name = 'registration/register.html'
     success_url = reverse_lazy('users:login')
     form_class = CustomUserCreationForm
-    success_message = "%(username)s, your profile was created successfully."
 
     def form_valid(self, form):
         """If the form is valid, save the associated model."""
         self.object = form.save()
         send_verification_email(self.request, self.object)
- 
+
+        messages.success(self.request, "%s, your profile was created successfully." % self.object.username)
+        messages.info(self.request, 'Please verify your email to log in!')
         return super().form_valid(form)
 
 
@@ -63,6 +75,17 @@ class EditView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     form_class = CustomUserChangeForm
     success_message = "Successfully updated profile."
 
+    def form_valid(self, form):
+        """If the form is valid, save the associated model."""
+        user = self.get_object() # this gets the user from the DB
+        if (user.email != self.object.email): #self.object contains the user from the form
+            self.object.email_verified = False
+            send_verification_email(self.request, self.object)
+            messages.info(self.request, 'Please verify your email to log in!')
+            logout_then_login(self.request)
+        
+        self.object = form.save()
+        return super().form_valid(form)
 
     def get_object(self):
         return get_object_or_404(CustomUser, pk=self.request.user.id)
@@ -90,12 +113,9 @@ class CustomLoginView(LoginView):
         return redirect(self.get_success_url())
 
 def activate_user(request, uidb64, token):
-
     try:
         uid = force_str(urlsafe_base64_decode(uidb64))
-
         user = CustomUser.objects.get(pk=uid)
-
     except Exception as e:
         user = None
 

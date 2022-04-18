@@ -17,6 +17,10 @@ class CustomUserChangeForm(ModelForm):
         model = CustomUser
         fields = ("username", "email", "first_name", "last_name", "hide_email",)
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['email'].help_text += " If you change your email, you have to verify it again and you will be logged out!"
+
 
 class CustomUserAuthenticationForm(AuthenticationForm):
     username = UsernameField(
