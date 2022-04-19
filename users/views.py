@@ -2,11 +2,12 @@ import re
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib import messages
 from django.views.generic.edit import CreateView, UpdateView
+from django.views.generic import FormView
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404, redirect, render
 
-from users.forms import CustomUserCreationForm, CustomUserChangeForm, CustomUserAuthenticationForm
+from users.forms import CustomUserCreationForm, CustomUserChangeForm, CustomUserAuthenticationForm, ResendEmailVerificationForm
 from django.contrib.auth.views import LoginView
 from users.models import CustomUser
 
@@ -111,6 +112,32 @@ class CustomLoginView(LoginView):
         auth_login(self.request, user)
         messages.success(self.request, 'Successfully signed in.')
         return redirect(self.get_success_url())
+
+class ResendEmailVerificationView(SuccessMessageMixin, FormView):
+    template_name = 'registration/resend-email-verification.html'
+    success_url = reverse_lazy('users:login')
+    form_class = ResendEmailVerificationForm
+    #Can't use success_message, cos it attaches to form_valid
+
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+
+        try:
+            self.user = CustomUser.objects.get(email__iexact=form['email'].value()) #form.cleaned_data is accessible after running form.is_valid(), which works for non-registered users only.
+        except Exception as e:
+            self.user = None
+
+        if self.user:
+            if self.user.email_verified == False:
+                send_verification_email(self.request, self.user)
+                messages.success(self.request, 'Email verification resent. Please verify your email to log in.')
+                return redirect(self.get_success_url())
+            else:
+                messages.error(self.request, 'User\'s email already verified!')
+        else:
+            messages.error(self.request, 'User with this email not found!')
+
+        return render(self.request, self.template_name, { 'form': self.form_class })
 
 def activate_user(request, uidb64, token):
     try:

@@ -1,2 +1,6 @@
 {% extends "base.html" %}
 {% block title %}Email activation failed{% endblock %}
+
+{% block content %}
+<p>Resend email verification <a href='{% url "users:resend_email" %}'>here.</a></p>
+{% endblock %}

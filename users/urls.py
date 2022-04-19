@@ -11,4 +11,5 @@ urlpatterns = [
     path('edit/', views.EditView.as_view(), name='edit_account'),
     path('activate-user/<uidb64>/<token>',
          views.activate_user, name='activate'),
+    path('resend/', views.ResendEmailVerificationView.as_view(), name='resend_email')
 ]

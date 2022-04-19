@@ -34,3 +34,7 @@ class CustomUserAuthenticationForm(AuthenticationForm):
         ),
     }
 
+class ResendEmailVerificationForm(ModelForm):
+    class Meta:
+        model = CustomUser
+        fields = ("email",)
