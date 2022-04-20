@@ -13,10 +13,10 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 from pathlib import Path
 import os
 from django.contrib.messages import constants as messages
-from dotenv import load_dotenv
 import sys
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Quick-start development settings - unsuitable for production
@@ -27,14 +27,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = None
 
 # SECURITY WARNING: don't run with debug turned on in production!
+
 DEBUG = None
 
 ALLOWED_HOSTS = ["*"]
 
 #Testing flag
+
 TESTING = len(sys.argv) > 1 and sys.argv[1] == 'test'
 
 # Custom settings
+
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 LOGIN_REDIRECT_URL = 'users:dashboard'
@@ -148,13 +151,13 @@ STATIC_URL = '/static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Settings Django's default message tags to match Bootstrap's contextual classes.
+
 MESSAGE_TAGS = {
     messages.ERROR: 'danger',
 }
 
 # EMAIL CONFIG
 
-load_dotenv()
 EMAIL_FROM_USER = os.getenv('EMAIL_FROM_USER')
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = os.getenv('EMAIL_FROM_USER')

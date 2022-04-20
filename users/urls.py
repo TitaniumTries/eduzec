@@ -10,6 +10,6 @@ urlpatterns = [
     path('dashboard/', login_required(TemplateView.as_view(template_name="users/dashboard.html")), name='dashboard'),
     path('edit/', views.EditView.as_view(), name='edit_account'),
     path('activate-user/<uidb64>/<token>',
-         views.activate_user, name='activate'),
+         views.ActivateUserView.as_view(), name='activate'),
     path('resend/', views.ResendEmailVerificationView.as_view(), name='resend_email')
 ]
