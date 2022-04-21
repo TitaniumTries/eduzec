@@ -1,19 +1,16 @@
-from django.shortcuts import render
-from django.http import JsonResponse, HttpResponseRedirect
-from django.views import View
-from django.views.generic.list import ListView
-from django.views.generic import DetailView, CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import Count
-from requests import request
-from .forms import QuestionForm, AnswerForm
 from django.contrib.messages.views import SuccessMessageMixin
-from django.urls import reverse, reverse_lazy
-from . import models
-from .models import Question, Answer, Comment
+from django.db.models import Count
+from django.http import JsonResponse
+from django.shortcuts import render
+from django.views import View
+from django.views.generic import DetailView, CreateView
+from django.views.generic.list import ListView
 
-from vote.models import UP, DOWN
+from .forms import QuestionForm, AnswerForm
+from .models import Question, Answer, Comment
 from .utilities import cast_vote, save_text_help
+
 
 class QuestionsView(ListView):
     model = Question
@@ -32,6 +29,7 @@ class QuestionsView(ListView):
         qs = qs.annotate(count_of_answers=Count('answer'))
         return qs
 
+
 class QuestionDetailView(DetailView):
     model = Question
     template_name = 'forum/detail.html'
@@ -41,12 +39,12 @@ class QuestionDetailView(DetailView):
         context = super(QuestionDetailView, self).get_context_data(**kwargs)
 
         context['tags'] = self.object.tags.split(',')
-        answers = Answer.objects.filter(question=self.object).order_by('-vote_score')    
+        answers = Answer.objects.filter(question=self.object).order_by('-vote_score')
         comments = []
         for answer in answers:
             comments.append(Comment.objects.filter(answer=answer))
         context['answers_comments'] = zip(answers, comments)
-        
+
         return context
 
     def get_queryset(self):
@@ -54,20 +52,20 @@ class QuestionDetailView(DetailView):
         qs = qs.annotate(count_of_answers=Count('answer'))
 
         return qs
-    
 
-class AskForm(SuccessMessageMixin , CreateView):
+
+class AskForm(SuccessMessageMixin, CreateView):
     template_name = 'forum/ask-question.html'
     model = Question
     form_class = QuestionForm
     success_message = 'Success!'
-    
-    
+
     def form_valid(self, form):
         form.instance.user = self.request.user
         form.save()
         return super(AskForm, self).form_valid(form)
-    
+
+
 class AnswerForm(SuccessMessageMixin, CreateView):
     template_name = 'forum/answer-question.html'
     model = Answer
@@ -83,15 +81,18 @@ class AnswerForm(SuccessMessageMixin, CreateView):
 
 class WriteCommentAnswerView(View):
     def post(self, request):
-        text=request.POST['text']
-        id=request.POST['id']
+        text = request.POST['text']
+        id = request.POST['id']
         text_type = request.POST['type']
-        user=request.user
+        user = request.user
 
         if text_type == "comment":
-            return render(request, 'forum/includes/single_comment.html', {'comment': save_text_help(text, id, text_type, user)})
+            return render(request, 'forum/includes/single_comment.html',
+                          {'comment': save_text_help(text, id, text_type, user)})
         else:
-            return render(request, 'forum/includes/single_answer.html', {'answer': save_text_help(text, id, text_type, user)})
+            return render(request, 'forum/includes/single_answer.html',
+                          {'answer': save_text_help(text, id, text_type, user)})
+
 
 class SaveVoteView(LoginRequiredMixin, View):
     def post(self, request):
