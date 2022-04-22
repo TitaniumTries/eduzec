@@ -46,7 +46,7 @@ class CustomUser(AbstractBaseUser):
     groups = models.ManyToManyField(blank=True, help_text='The groups this user belongs to. A user will get all permissions granted to each of their groups.', related_name='user_set', related_query_name='user', to='auth.Group', verbose_name='groups')
     user_permissions = models.ManyToManyField(blank=True, help_text='Specific permissions for this user.', related_name='user_set', related_query_name='user', to='auth.Permission', verbose_name='user permissions')
     hide_email = models.BooleanField(default=True, help_text='Make user email private.', verbose_name='hide email')
-    #email_verified = models.BooleanField(default=False) #to be implemented to allow only users with verified email addresses to sign in. See auth.py to add.
+    email_verified = models.BooleanField(default=False) #to be implemented to allow only users with verified email addresses to sign in. See auth.py to add.
 
     objects = CustomUserManager()
 

@@ -4,8 +4,11 @@ from django.contrib.auth.models import Group
 from .models import CustomUser
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.core.exceptions import ValidationError
-from .forms import CustomUserChangeForm, CustomUserCreationForm
 from django.contrib.auth.admin import UserAdmin
+
+from django.contrib.admin.forms import AdminAuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, UsernameField
+from django.utils.translation import gettext_lazy as _
 
 # Register your models here.
 
@@ -17,7 +20,7 @@ class UserCreationForm(forms.ModelForm):
 
     class Meta:
         model = CustomUser
-        fields = ('username', 'email', )
+        fields = () # necessary attribute
 
     def clean_password2(self):
         # Check that the two password entries match
@@ -44,8 +47,23 @@ class UserChangeForm(forms.ModelForm):
 
     class Meta:
         model = CustomUser
-        fields = ('username', 'password', 'email', 'is_active', 'is_staff', )
+        fields = () # necessary attribute
 
+class CustomAdminAuthenticationForm(AdminAuthenticationForm):
+    """
+    A custom authentication form used in the admin app.
+    """
+    error_messages = {
+        **AuthenticationForm.error_messages,
+        'invalid_login': _(
+            "Please enter a correct username or email, and password. Note that both fields may be case-sensitive."
+        ),
+    }
+
+    username = UsernameField(
+        label='Username or Email',
+        widget=forms.TextInput(attrs={'autofocus': True})
+    )
 
 class CustomUserAdmin(UserAdmin):
     model = CustomUser
@@ -59,7 +77,27 @@ class CustomUserAdmin(UserAdmin):
         }),
     )
 
+    fieldsets = (
+        (None, {"fields": ("username", "password")}),
+        (_("Personal info"), {"fields": ("first_name", "last_name", "email")}),
+        (
+            _("Permissions"),
+            {
+                "fields": (
+                    "is_active",
+                    "is_staff",
+                    "is_superuser",
+                    "groups",
+                    "user_permissions",
+                ),
+            },
+        ),
+        (_("Important dates"), {"fields": ("last_login", "date_joined")}),
+        (_("Email details"), {"fields": ("hide_email", "email_verified")}),
+    )
+
     #specify fieldsets to veiw any special user creation fields you've added in your CustomUser model.
 
 admin.site.register(CustomUser, CustomUserAdmin)
 admin.site.unregister(Group)
+admin.site.login_form = CustomAdminAuthenticationForm

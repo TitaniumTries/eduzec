@@ -8,8 +8,8 @@
         {% csrf_token %}
         {{form|crispy}}
         <p>Don't have an account? Create one <a href='{% url "users:register" %}'>here.</a></p>
+        <p>Resend email verification <a href='{% url "users:resend_email" %}'>here.</a></p>
         <button type='submit' class='btn btn-success'>Login</button>
-        
     </form>
 
 {% endblock %}
