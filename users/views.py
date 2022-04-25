@@ -17,6 +17,8 @@ from django.utils.http import urlsafe_base64_decode
 from django.utils.encoding import force_str
 from .utilities import generate_token, send_verification_email
 
+from django.contrib.auth.views import PasswordResetView, PasswordResetConfirmView, PasswordChangeView
+
 class SignUpView(SuccessMessageMixin, CreateView):
     template_name = 'registration/register.html'
     success_url = reverse_lazy('users:login')
@@ -126,3 +128,14 @@ class ActivateUserView(View):
         messages.add_message(request, messages.ERROR,
                                  'Something went wrong with your link.')
         return render(request, 'registration/activate-fail.html', {"user": user})
+
+# Defining custom classes to successfully reverse django.contrib.auth.urls, 
+# since they're in the users' app
+class CustomPasswordResetView(PasswordResetView):
+    success_url = reverse_lazy("users:password_reset_done")
+
+class CustomPasswordResetConfirmView(PasswordResetConfirmView):
+    success_url = reverse_lazy("users:password_reset_complete")
+
+class CustomPasswordChangeView(PasswordChangeView):
+    success_url = reverse_lazy("users:password_change_done")
