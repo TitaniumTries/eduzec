@@ -4,6 +4,8 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
+    <h1>Resend email verification.</h1>
+    <p>Fill in your email to receive another verification.</p>
     <form method='POST' class='form-group'>
         {% csrf_token %}
         {{form|crispy}}
