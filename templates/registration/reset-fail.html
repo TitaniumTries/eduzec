@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block title %}Password reset failed{% endblock %}
+
+{% block content %}
+<p>Resend email for password reset <a href='{% url "users:password_reset" %}'>here.</a></p>
+{% endblock %}

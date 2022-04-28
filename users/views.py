@@ -13,11 +13,22 @@ from users.models import CustomUser
 
 from django.contrib.auth import login as auth_login
 from django.contrib.auth.views import logout_then_login
+from django.contrib.auth import logout as auth_logout
 from django.utils.http import urlsafe_base64_decode
 from django.utils.encoding import force_str
 from .utilities import generate_token, send_verification_email
 
 from django.contrib.auth.views import PasswordResetView, PasswordResetConfirmView, PasswordChangeView
+
+INTERNAL_RESET_SESSION_TOKEN = "_password_reset_token"
+from django.core.exceptions import ImproperlyConfigured
+from django.http import HttpResponseRedirect
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import never_cache
+from django.views.decorators.debug import sensitive_post_parameters
+
+from django.utils.safestring import mark_safe
+from django.contrib.auth import update_session_auth_hash
 
 class SignUpView(SuccessMessageMixin, CreateView):
     template_name = 'registration/register.html'
@@ -130,12 +141,67 @@ class ActivateUserView(View):
         return render(request, 'registration/activate-fail.html', {"user": user})
 
 # Defining custom classes to successfully reverse django.contrib.auth.urls, 
-# since they're in the users' app
-class CustomPasswordResetView(PasswordResetView):
+# since they're in the users' app and use django messages framework
+class CustomPasswordResetView(SuccessMessageMixin, PasswordResetView):
     success_url = reverse_lazy("users:password_reset_done")
+    success_message = "Password reset email sent. Check your email to reset your password."
 
-class CustomPasswordResetConfirmView(PasswordResetConfirmView):
-    success_url = reverse_lazy("users:password_reset_complete")
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect('users:password_change')
 
-class CustomPasswordChangeView(PasswordChangeView):
-    success_url = reverse_lazy("users:password_change_done")
+        return super().dispatch(request, *args, **kwargs)
+
+class CustomPasswordResetConfirmView(SuccessMessageMixin ,PasswordResetConfirmView):
+    success_url = reverse_lazy("users:login")
+    success_message = mark_safe("Your password has been successfully reset.<br/>You can now login with your new password.")
+
+    #Copied from PasswordResetConfirmView, changed the unsuccessful page redirect
+    @method_decorator(sensitive_post_parameters())
+    @method_decorator(never_cache)
+    def dispatch(self, *args, **kwargs):
+        if "uidb64" not in kwargs or "token" not in kwargs:
+            raise ImproperlyConfigured(
+                "The URL path must contain 'uidb64' and 'token' parameters."
+            )
+
+        self.validlink = False
+        self.user = self.get_user(kwargs["uidb64"])
+
+        if self.user is not None:
+            token = kwargs["token"]
+            if token == self.reset_url_token:
+                session_token = self.request.session.get(INTERNAL_RESET_SESSION_TOKEN)
+                if self.token_generator.check_token(self.user, session_token):
+                    # If the token is valid, display the password reset form.
+                    self.validlink = True
+                    return super().dispatch(*args, **kwargs)
+            else:
+                if self.token_generator.check_token(self.user, token):
+                    # Store the token in the session and redirect to the
+                    # password reset form at a URL without the token. That
+                    # avoids the possibility of leaking the token in the
+                    # HTTP Referer header.
+                    self.request.session[INTERNAL_RESET_SESSION_TOKEN] = token
+                    redirect_url = self.request.path.replace(
+                        token, self.reset_url_token
+                    )
+                    return HttpResponseRedirect(redirect_url)
+
+        # Display the "Password reset unsuccessful" page.
+        messages.add_message(self.request, messages.ERROR,
+                                 'Something went wrong with your link.')
+        return render(self.request, 'registration/reset-fail.html', {"user": self.user})
+
+class CustomPasswordChangeView(SuccessMessageMixin ,PasswordChangeView):
+    success_url = reverse_lazy("users:login")
+    success_message = mark_safe("Your password has been successfully changed.<br/>You can log in with your new password.")
+
+    def form_valid(self, form):
+        form.save()
+        # Updating the password logs out all other sessions for the user
+        # except the current one.
+        update_session_auth_hash(self.request, form.user)
+        #Make the user use his new password
+        auth_logout(self.request)
+        return super().form_valid(form)
