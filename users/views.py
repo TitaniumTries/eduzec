@@ -7,7 +7,7 @@ from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404, redirect, render
 
-from users.forms import CustomUserCreationForm, CustomUserChangeForm, CustomUserAuthenticationForm, ResendEmailVerificationForm
+from users import forms as users_forms
 from django.contrib.auth.views import LoginView
 from users.models import CustomUser
 
@@ -30,10 +30,11 @@ from django.views.decorators.debug import sensitive_post_parameters
 from django.utils.safestring import mark_safe
 from django.contrib.auth import update_session_auth_hash
 
+
 class SignUpView(SuccessMessageMixin, CreateView):
     template_name = 'registration/register.html'
     success_url = reverse_lazy('users:login')
-    form_class = CustomUserCreationForm
+    form_class = users_forms.CustomUserCreationForm
 
     def form_valid(self, form):
         """If the form is valid, save the associated model."""
@@ -50,10 +51,11 @@ class SignUpView(SuccessMessageMixin, CreateView):
 
         return super().dispatch(request, *args, **kwargs)
 
+
 class EditView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     template_name = 'users/edit_account.html'
     success_url = reverse_lazy('users:edit_account')
-    form_class = CustomUserChangeForm
+    form_class = users_forms.CustomUserChangeForm
     success_message = "Successfully updated profile."
 
     def form_valid(self, form):
@@ -71,8 +73,9 @@ class EditView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     def get_object(self):
         return get_object_or_404(CustomUser, pk=self.request.user.id)
 
+
 class CustomLoginView(LoginView):
-    authentication_form = CustomUserAuthenticationForm
+    authentication_form = users_forms.CustomUserAuthenticationForm
     redirect_authenticated_user = True
     #success_url not needed. There's a LOGIN_REDIRECT_URL in base.py settings.
 
@@ -87,11 +90,12 @@ class CustomLoginView(LoginView):
     #     messages.success(self.request, 'Successfully signed in.')
     #     return redirect(self.get_success_url())
 
+
 class ResendEmailVerificationView(SuccessMessageMixin, FormView):
     template_name = 'registration/resend-email-verification.html'
     success_url = reverse_lazy('users:login')
-    form_class = ResendEmailVerificationForm
-    #Can't use success_message, cos it attaches to form_valid
+    form_class = users_forms.ResendEmailVerificationForm
+    success_message = "Email verification resent. Please verify your email to log in."
 
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
@@ -99,25 +103,13 @@ class ResendEmailVerificationView(SuccessMessageMixin, FormView):
 
         return super().dispatch(request, *args, **kwargs)
 
-    def post(self, request, *args, **kwargs):
-        form = self.get_form()
+    def form_valid(self, form):
+        opts = {
+            "request": self.request,
+        }
+        form.save(**opts)
+        return super().form_valid(form)
 
-        try:
-            self.user = CustomUser.objects.get(email__iexact=form['email'].value()) #form.cleaned_data is accessible after running form.is_valid(), which works for non-registered users only.
-        except Exception as e:
-            self.user = None
-
-        if self.user:
-            if self.user.email_verified == False:
-                send_verification_email(self.request, self.user)
-                messages.success(self.request, 'Email verification resent. Please verify your email to log in.')
-                return redirect(self.get_success_url())
-            else:
-                messages.error(self.request, 'User\'s email already verified!')
-        else:
-            messages.error(self.request, 'User with this email not found!')
-
-        return render(self.request, self.template_name, { 'form': self.form_class })
 
 class ActivateUserView(View):
 
@@ -140,9 +132,11 @@ class ActivateUserView(View):
                                  'Something went wrong with your link.')
         return render(request, 'registration/activate-fail.html', {"user": user})
 
+
 # Defining custom classes to successfully reverse django.contrib.auth.urls, 
 # since they're in the users' app and use django messages framework
 class CustomPasswordResetView(SuccessMessageMixin, PasswordResetView):
+    form_class = users_forms.CustomPasswordResetForm
     success_url = reverse_lazy("users:password_reset_done")
     success_message = "Password reset email sent. Check your email to reset your password."
 
@@ -151,6 +145,7 @@ class CustomPasswordResetView(SuccessMessageMixin, PasswordResetView):
             return redirect('users:password_change')
 
         return super().dispatch(request, *args, **kwargs)
+
 
 class CustomPasswordResetConfirmView(SuccessMessageMixin ,PasswordResetConfirmView):
     success_url = reverse_lazy("users:login")
@@ -192,6 +187,7 @@ class CustomPasswordResetConfirmView(SuccessMessageMixin ,PasswordResetConfirmVi
         messages.add_message(self.request, messages.ERROR,
                                  'Something went wrong with your link.')
         return render(self.request, 'registration/reset-fail.html', {"user": self.user})
+
 
 class CustomPasswordChangeView(SuccessMessageMixin ,PasswordChangeView):
     success_url = reverse_lazy("users:login")
