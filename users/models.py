@@ -1,3 +1,4 @@
+from email.policy import default
 from django.db import models
 from django.contrib.auth.models import ( 
     AbstractBaseUser, BaseUserManager
@@ -5,6 +6,8 @@ from django.contrib.auth.models import (
 from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.core.validators import validate_email
 from django.utils import timezone
+
+from imagekit.models import ProcessedImageField
 
 # Create your models here.
 
@@ -33,9 +36,15 @@ class CustomUserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
+from imagekit.processors import ResizeToFill, Thumbnail, ResizeToFit
+
 class CustomUser(AbstractBaseUser):
     username = models.CharField(error_messages={'unique': 'A user with that username already exists.'}, help_text='Required. 40 characters or fewer. Letters, digits and @/./+/-/_ only.', max_length=40, unique=True, validators=[UnicodeUsernameValidator, ], verbose_name='username')
     email = models.EmailField(max_length=254,help_text='Required. 254 characters or fewer.', validators=[validate_email] ,verbose_name='email address', unique=True)
+    avatar = ProcessedImageField(null=True, blank=True, upload_to='avatars',
+                                           processors=[ResizeToFit(50, 100)],
+                                           format='JPEG',
+                                           options={'quality': 60})
     first_name =  models.CharField(blank=True, max_length=150, verbose_name='first name')
     last_name = models.CharField(blank=True, max_length=150, verbose_name='last name')
     last_login = models.DateTimeField(blank=True, null=True, verbose_name='last login')

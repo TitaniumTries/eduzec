@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'users',
     'vote',
+    'imagekit',
 ]
 
 # Add static file directory
@@ -164,3 +165,7 @@ EMAIL_HOST_USER = os.getenv('EMAIL_FROM_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
+
+# User-uploaded static files
+MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_URL = '/media/'
