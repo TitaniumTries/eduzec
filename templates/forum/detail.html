@@ -22,6 +22,7 @@
     <p>
         <span class='mr-2'>{{quest.add_time|date:'d/m/y'}}</span>
         <text>by</text>
+        {% include 'users/includes/avatar.html' with avatar=quest.user.avatar %}
         <a href='#' class='ml-2'>{{quest.user}}</a>
         <button type='button' class='btn btn-dark'><a href='{% url 'forum:answer_with_pk' pk=quest.id %}'>Answer</a></button>
     </p>
@@ -63,6 +64,7 @@
             <p>
                 <span class='mr-2'>{{answer.add_time|date:'d/m/y'}}</span>
                 <text>by</text>
+                {% include 'users/includes/avatar.html' with avatar=answer.user.avatar %}
                 <a href='#' class='mr-2'>{{ answer.user }}</a>
                 <span>{{ comments|length }} comments</span>
             </p>
