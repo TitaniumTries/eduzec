@@ -1,16 +1,18 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 {% load crispy_forms_filters %}
 {% block title %}Login - Eduzec{% endblock %}
 {% load crispy_forms_tags %}
 
 {% block content %}
-    <form method='POST' class='form-group'>
-        {% csrf_token %}
-        {{form|crispy}}
-        <p>Don't have an account? Create one <a href='{% url "users:register" %}'>here.</a></p>
-        <p>Forgot your password? Reset it <a href='{% url "users:password_reset" %}'>here.</a></p>
-        <p>Resend email verification <a href='{% url "users:resend_email" %}'>here.</a></p>
-        <button type='submit' class='btn btn-success'>Login</button>
-    </form>
+    <div class='container'>
+        <form method='POST' class='form-group'>
+            {% csrf_token %}
+            {{form|crispy}}
+            <p>Don't have an account? Create one <a href='{% url "users:register" %}'>here.</a></p>
+            <p>Forgot your password? Reset it <a href='{% url "users:password_reset" %}'>here.</a></p>
+            <p>Resend email verification <a href='{% url "users:resend_email" %}'>here.</a></p>
+            <button type='submit' class='btn btn-success'>Login</button>
+        </form>
+    </div>
 
 {% endblock %}

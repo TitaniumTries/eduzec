@@ -4,11 +4,13 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-    <form method='POST' class='form-group'>
-        {% csrf_token %}
-        {{form|crispy}}
-        <button type='submit' class='btn btn-success' name="register">Register</button>
-        <p>Already have an account? Login <a href='{% url "users:login" %}'>here.</a>
-    </form>
+    <div class='container'>
+        <form method='POST' class='form-group'>
+            {% csrf_token %}
+            {{form|crispy}}
+            <button type='submit' class='btn btn-success' name="register">Register</button>
+            <p>Already have an account? Login <a href='{% url "users:login" %}'>here.</a>
+        </form>
+    </div>
 
 {% endblock %}
